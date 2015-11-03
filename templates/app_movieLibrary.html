@@ -6,11 +6,11 @@
         {% if item.imgUrl.length > 0 %}
         <span class="coverImage" style="background-image:url({{item.imgUrl}})"></span>
         {% else %}
-        <span class="coverImage" style="background-image)"></span>
+        <span class="coverImage" style="background-image"></span>
         {% endif %}
     </span>
-    <p>{{item.title}}</p>
-    <p>{{item.year}}</p>
-    <p>{{item.imdbRating}}</p>
+    <p class="titleText"> {{item.title}} </p>
+    <p class="infoText leftInfoItem"> {{item.year}} </p>
+    <p class="infoText rightInfoItem"> {{item.imdbRating}} </p>
 </div>
 {% endfor %}

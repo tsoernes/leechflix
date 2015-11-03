@@ -27,6 +27,16 @@ exports.fetch = function(url, callback) {
 	});
 }
 
+exports.play = function(torrentUrl) {
+	downloadTorrent(torrentUrl, function(err, path) {
+		if (err) {
+			console.log(err);
+		} else {
+			launchPeerflix(path);
+		}
+	});
+}
+
 function login(callback) {
 	request.post({
 		uri: config.loginUrl,
@@ -67,12 +77,12 @@ function scrapeTorrents(url, callback) {
 			var show = {title: info.title, year: info.year};
 			asyncTasks.push(function(callback){
 				getOmdbInfo(show, function (err, res) {
-					//if (err) omdbInfo = {runtime: "", actors: "", plot: "", imdb: {id: "", rating: "", votes: ""}, poster: ""};
+					if (err) omdbInfo = {runtime: "", actors: "", plot: "", imdb: {id: "", rating: 0, votes: 0}, poster: ""};
 					if (res) {
 						omdbInfo = res;
 						var movieInfo = {
-							title: info.title,
-							year: info.year,
+							title: omdbInfo.title,
+							year: omdbInfo.year,
 							release: [{
 								rlsDetails: info.rlsDetails,
 								detailsUrl: detailsUrl,
@@ -94,6 +104,10 @@ function scrapeTorrents(url, callback) {
 						for (var j=0; j<results.length; j++) {
 							if (results[j].imdbId == movieInfo.imdbId) {
 								results[j].release.push(movieInfo.release[0]);
+								// Sort by number of seeders in descending order
+								results[j].release = results[j].release.sort(function(b, a) {
+					                return parseFloat(a.seeders) - parseFloat(b.seeders);
+					            })
 								added = true;
 								break;
 							}
@@ -201,7 +215,11 @@ function scrapeTorrentDetails(url, callback) {
 
 function downloadTorrent(url, callback) {
 	var filename = url.split("/");
-	var path = "./torrents/" + filename[filename.length - 1];
+	var dir = './torrents/';
+	if (!fs.existsSync(dir)){
+	    fs.mkdirSync(dir);
+	}
+	var path = dir + filename[filename.length - 1];
 	var url = "http://torrentleech.org" + url;
 	request({uri: url})
 		.on('error', function(err) {
@@ -254,30 +272,6 @@ function getOmdbInfo(show, callback) {
 	});
 }
 
-/*
-results.push({
-	title: info.title,
-	year: info.year,
-	release: [{
-		rlsDetails: info.rlsDetails,
-		detailsUrl: detailsUrl,
-		torrentUrl: torrentUrl,
-		size: size
-	}],
-	seeders: seeders,
-	leechers: leechers,
-	runtime: omdbInfo.runtime,
-	genres: omdbInfo.genres,
-	actors: omdbInfo.actors,
-	plot: omdbInfo.plot,
-	imdbId: omdbInfo.imdb.id,
-	imdbRating: omdbInfo.imdb.rating,
-	imdbVotes: omdbInfo.imdb.votes,
-	imgUrl: omdbInfo.poster
-
-
-*/
-
 // Merge different releases of the same movie (same imdb id) into one object
 function mergeResults(results, callback) {
 	finalRes = [];
@@ -287,9 +281,8 @@ function mergeResults(results, callback) {
 	callback(null, finalRes);
 }
 
-function play(torrentFilePath) {
+function launchPeerflix(torrentFilePath) {
 	// Torrent location is relative to the location of this script
-	console.log(torrentFilePath);
 	var child = spawn('cmd', ['/c', 'peerflix', torrentFilePath, "--mpchc"]);
 	child.on('error', function (err) {
 		console.log('Failed to start child process.');

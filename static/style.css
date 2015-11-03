@@ -36,7 +36,84 @@ body {
   src: local('Fira Sans'), url('fonts/FiraSans-Light.otf') format('opentype');
 }
 
+/*---------------------
+Movie details
+----------------------*/
 
+/* Modal container */
+.topDiv {
+	display: inline-block;
+	height: 700px;
+	width: 1200px;
+	padding: 20px;
+	background-color: #EBEBEB;
+	color: rgba(27, 27, 27, 0.98);
+	overflow: auto;
+}
+
+.topDivFree {
+	padding: 0px;
+}
+
+.topDivBanner {
+	width: 100%;
+	height: 100%;
+	top:0px;
+	background-position: top left;
+	height: 445px;
+	margin-top: -10px;
+	background-color: white;
+	background-repeat: no-repeat;
+}
+
+
+.bunnerOverlay {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(27, 27, 27,.75);
+	color:#EBEBEB;
+	position: relative;
+}
+
+.topDivText {
+	font-weight: normal;
+	margin: 10px 30px;
+	font-size: 17px;
+	line-height: 25px;
+	height: 25px;
+	width: 300px;
+	position: absolute;
+	display: inline-block!important;
+}
+
+.topDivDes {
+	width: 90%;
+	margin: 10px auto;
+	padding-top: 10px;
+	text-align: justify;
+	position: relative;
+}
+
+.movieOverlayEx {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	width: 90%;
+	display: inline-block;
+}
+
+.showLeft {
+	float:left;
+	text-align: left;
+}
+
+.showRight {
+	float:right;
+	text-align: right;
+}
+
+/*-----------------------
+
+-------------------------*/
 a {
 	color: inherit;
 	text-decoration: none;
@@ -197,7 +274,13 @@ a:hover {
 
 }
 
-
+.details {
+	width: auto;
+	height: auto;
+	margin: 20px 20px;
+	display: inline-block;
+	overflow: hidden;
+}
 
 .item {
 	width: 160px;
@@ -279,6 +362,19 @@ a:hover {
 	background-size: cover;
 }
 
+.detailsImagePlaceholder {
+	height: 445px;
+	width: 300px;
+	display: inline-block;
+	position: absolute;
+}
+
+.detailsCoverImage {
+	height: 445px;
+	width: 300px;
+	background-image: url("blank.png");
+}
+
 
 .item img {
 	border-style: solid;
@@ -331,22 +427,6 @@ a:hover {
 	position: absolute;
 }
 
-
-
-
-/*Multiple Selection*/
-
-.topDiv {
-	display: none;
-
-	height: 450px;
-	width: 780px;
-
-	padding: 20px;
-	background-color: #EBEBEB;
-	color: rgba(27, 27, 27, 0.98);
-	overflow: auto;
-}
 .topDiv h2 {
 	border-bottom: 1px solid rgba(27, 27, 27, 0.98);
 	width: 90%;
@@ -355,34 +435,11 @@ a:hover {
 	margin-top: 20px;
 }
 
-
-
-.topDivFree {
-	padding: 0px;
-}
-.topDivBanner {
-	width: 100%;
-	top:0px;
-	background-size: cover;
-	background-position: top center;
-	height: 300px;
-	margin-top: -25px;
-	background-color: white;
-	background-repeat: no-repeat;
-}
 .topDivBannerSmaller {
 	height: 250px;
 }
 
 
-
-
-.bunnerOverlay {
-	width: 100%; height: 100%;
-	background-color: rgba(27, 27, 27,.75);
-	color:#EBEBEB;
-	position: relative;
-}
 .bunnerOverlayDarker {
 	background-color: rgba(27, 27, 27,.8);
 }
@@ -396,6 +453,7 @@ a:hover {
 	max-height: 100px;
 	overflow: hidden;
 }
+
 .topDivBanner h5 {
 	margin: 10px 30px;
 	font-size: 20px;
@@ -403,25 +461,54 @@ a:hover {
 	height: 50px;
 	overflow: hidden;
 }
-.topDivText {
-	font-weight: normal;
-	margin: 10px 30px;
-	font-size: 17px;
-	line-height: 25px;
-	height: 25px;
-	width: 200px;
-	position: absolute;
-}
+
+
+
 .leftItem {
 	text-align: left;
-		left: 5px;
-
+	left: 5px;
 }
+
 .rightItem {
 	text-align: right;
 	right: 5px;
 	text-decoration: underline;
+}
 
+.titleText {
+	font-weight: normal;
+	font-size: 14px!important;
+	margin: 1px 1px;
+	line-height: 1px;
+	text-align: left!important;
+	left: 1px;
+	position: absolute!important;
+	display: block!important;
+	width: inherit;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.infoText {
+	font-weight: normal;
+	font-size: 13px;
+	color: gray;
+	margin: 1px 1px;
+	line-height: 1px;
+	position: absolute;
+	display: inline-block;
+	bottom: 25px;
+}
+
+.leftInfoItem {
+	text-align: left;
+	left: 1px;
+}
+
+.rightInfoItem {
+	text-align: right;
+	right: 1px;
 }
 
 #movieMore {
@@ -435,30 +522,6 @@ a:hover {
 }
 #movieYT {
 	bottom: 5px;
-}
-
-
-.topDivDes {
-	width: 60%;
-	margin: 10px auto;
-	padding-top: 10px;
-	text-align: justify;
-	position: relative;
-}
-
-.movieOverlayEx {
-	margin-top: 20px;
-	margin-bottom: 20px;
-	width: 50%;
-	display: inline-block;
-}
-.showLeft {
-	float:left;
-	text-align: left;
-}
-.showRight {
-	float:right;
-	text-align: right;
 }
 
 #overlaySettings h2{

@@ -5,8 +5,10 @@ var config = require('../config.js');
 var swig = 					require('swig');
 var appTemplate = 			swig.compileFile('templates/app.html');
 var movieLibraryTemplate =   swig.compileFile('templates/app_movieLibrary.html');
+var movieDetails            = swig.compileFile('templates/movieDetails.html')
 var mOverlayTemplate = 		swig.compileFile('templates/movieOverlay.html');
-//var movieDetailsTemplate = 	swig.compileFile('templates/movieDetails.html');
+
+// Search: https://torrentleech.org/torrents/browse/index/query/mission+impossible/categories/13%2C14/facets/tags%253Anonscene
 
 var results;
 
@@ -20,6 +22,9 @@ function fetch(url) {
         if (err) {
             console.log("err" + err);
         } else {
+            res = res.sort(function(b, a) {
+                return parseFloat(a.imdbRating) - parseFloat(b.imdbRating);
+            });
             console.log(res);
             results = res;
             sendItemsToView(res);
@@ -28,7 +33,7 @@ function fetch(url) {
 }
 
 function play(url) {
-    console.log("play");
+    scraper.play(url);
 }
 
 function sendItemsToView(movies) {
@@ -50,10 +55,13 @@ function showMovieOverlay(position) {
 		overlayType="no"
 	}
 	else {
-        // @TODO
 		overlayType="movie";
 		var movie = results[position];
-		document.getElementById("overlayMovie").innerHTML = (mOverlayTemplate({movie:movie,path:path,position:position}));
+		document.getElementById("overlayMovie").innerHTML = (mOverlayTemplate({movie:movie}));
 		$('#overlayMovie').trigger('openModal');
 	}
+}
+
+function openLink(link) {
+	gui.Shell.openExternal(link);
 }
