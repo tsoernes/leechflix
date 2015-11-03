@@ -13,6 +13,8 @@ core
 
 -add support for shows
 
+-add search
+
 -local database or cache
 
 -browse next (/page/2 ..)
