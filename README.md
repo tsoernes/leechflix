@@ -1,17 +1,13 @@
 # leechflix
-Popcorn-Time like movie streamer for torrentleech.org
+Popcorn-Time like movie streamer for www.torrentleech.org
 
-Build with NodeJS for Node-webkit; scraping with cheerio; OMDb API for movie info and images.
+Build with NodeJS for Node-webkit; scraping with cheerio; OMDb API for movie info and images; peerflix for torrent streaming.
 
 @Todo
 
-core
-
 -don't log in for every request
 
--add backdrops
-
--add support for shows
+-add support for tv shows
 
 -add search
 
@@ -19,7 +15,9 @@ core
 
 -browse next (/page/2 ..)
 
-ui
+-browse popular
 
--movie details overlay
+-add backdrops
+
+-use native peerflix streaming
 
