@@ -21,3 +21,4 @@ Build with NodeJS for Node-webkit; scraping with cheerio; OMDb API for movie inf
 
 -use native peerflix streaming
 
+-serch for all releases when viewing movie details
