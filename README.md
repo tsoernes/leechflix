@@ -13,7 +13,11 @@ core
 
 -add support for shows
 
+-local database or cache
+
+-browse next (/page/2 ..)
 
 ui
 
--everything
+-movie details overlay
+
