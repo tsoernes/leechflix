@@ -1,6 +1,6 @@
 var fs = require('fs');
 var omdb = require('omdb');
-var show = { title: 'THE.MAN.FROM.U.N.C.L.E', year: "2015" };
+var show = { title: 'THE MAN FROM UNCLE', year: "2015" };
 omdb.get(show, false, function(err, movie) {
     if(err) {
         return console.error(err);

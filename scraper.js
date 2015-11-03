@@ -9,6 +9,24 @@ var omdb = require('omdb');
 var config = require('./config');
 var loggedIn = false;
 
+exports.fetch = function(url, callback) {
+	login(function (err, data) {
+		if (err) {
+			console.log(err);
+			callback(err, null);
+		} else {
+			scrapeTorrents(url, function (err, results) {
+				if (err) {
+					console.log(err);
+					callback(err, null);
+				} else {
+					callback(null, results);
+				}
+			});
+		}
+	});
+}
+
 function login(callback) {
 	request.post({
 		uri: config.loginUrl,
@@ -34,6 +52,7 @@ function scrapeTorrents(url, callback) {
 		}
 		var $ = cheerio.load(body);
 		var results = [];
+		var asyncTasks = [];
 		$('span.title').each(function(i, element){
 			var name 		= $(this).text();
 			var detailsUrl 	= $(this).children().eq(0).attr('href');
@@ -43,46 +62,57 @@ function scrapeTorrents(url, callback) {
 			var leechers 	= $(this).parent().next().next().next().next().next().next().text();
 			var info = extractInfoFromName(name);
 
-			var omdbInfo;
-			var imgPath = "";
-			var show = {title: info.title, year: info.year};
-
 			// @TODO: do in parallel
 			// @TODO add files to a different view if they do not have info or image
-			getOmdbInfo(show, function (err, res) {
-				if (!err) {
-					omdbInfo = res;
-					downloadImage(show, function (err2, path) {
-						if (!err2) {
-							imgPath = path;
-							results.push({
-								title: info.title,
-								year: info.year,
+			var show = {title: info.title, year: info.year};
+			asyncTasks.push(function(callback){
+				getOmdbInfo(show, function (err, res) {
+					//if (err) omdbInfo = {runtime: "", actors: "", plot: "", imdb: {id: "", rating: "", votes: ""}, poster: ""};
+					if (res) {
+						omdbInfo = res;
+						var movieInfo = {
+							title: info.title,
+							year: info.year,
+							release: [{
 								rlsDetails: info.rlsDetails,
 								detailsUrl: detailsUrl,
 								torrentUrl: torrentUrl,
 								size: size,
 								seeders: seeders,
-								leechers: leechers,
-								runtime: omdbInfo.runtime,
-								genres: omdbInfo.genres,
-								actors: omdbInfo.actors,
-								plot: omdbInfo.plot,
-								imdbId: omdbInfo.imdb.id,
-								imdbRating: omdbInfo.imdb.rating,
-								imdbVotes: omdbInfo.imdb.rating,
-								imgPath: imgPath
-							});
+								leechers: leechers
+							}],
+							runtime: omdbInfo.runtime,
+							genres: omdbInfo.genres,
+							actors: omdbInfo.actors,
+							plot: omdbInfo.plot,
+							imdbId: omdbInfo.imdb.id,
+							imdbRating: omdbInfo.imdb.rating,
+							imdbVotes: omdbInfo.imdb.votes,
+							imgUrl: omdbInfo.poster
 						}
-					});
-				}
-			});
+						var added = false;
+						for (var j=0; j<results.length; j++) {
+							if (results[j].imdbId == movieInfo.imdbId) {
+								results[j].release.push(movieInfo.release[0]);
+								added = true;
+								break;
+							}
+						}
+						if (!added) {
+							results.push(movieInfo);
+						}
+
+					}
+					callback();
+				});
+  			});
 		});
-		console.log("Scrape main successful");
+		async.parallel(asyncTasks, function(){
+			console.log("Scrape main successful");
+		  	callback(null, results);
+		});
 	});
 }
-
-function noop() {}
 
 function extractInfoFromName(name) {
 	function isDigit(c) {
@@ -207,10 +237,6 @@ function downloadImage(show, callback) {
 				});
 	    }
 	});
-
-
-
-
 }
 
 function getOmdbInfo(show, callback) {
@@ -228,23 +254,38 @@ function getOmdbInfo(show, callback) {
 	});
 }
 
-function fetch() {
-	login(function (err, data) {
-		if (err) {
-			console.log(err);
-		} else {
-			scrapeTorrents(config.browseMoviesUrl, function (err, results) {
-				if (err) {
-					console.log(err);
-				} else {
-					console.log(results[0].magnet);
-				}
-			});
-		}
-	});
-}
+/*
+results.push({
+	title: info.title,
+	year: info.year,
+	release: [{
+		rlsDetails: info.rlsDetails,
+		detailsUrl: detailsUrl,
+		torrentUrl: torrentUrl,
+		size: size
+	}],
+	seeders: seeders,
+	leechers: leechers,
+	runtime: omdbInfo.runtime,
+	genres: omdbInfo.genres,
+	actors: omdbInfo.actors,
+	plot: omdbInfo.plot,
+	imdbId: omdbInfo.imdb.id,
+	imdbRating: omdbInfo.imdb.rating,
+	imdbVotes: omdbInfo.imdb.votes,
+	imgUrl: omdbInfo.poster
 
-fetch();
+
+*/
+
+// Merge different releases of the same movie (same imdb id) into one object
+function mergeResults(results, callback) {
+	finalRes = [];
+	for (var i=0; i<results.size; i++) {
+
+	}
+	callback(null, finalRes);
+}
 
 function play(torrentFilePath) {
 	// Torrent location is relative to the location of this script

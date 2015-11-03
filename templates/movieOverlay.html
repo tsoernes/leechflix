@@ -1,0 +1,30 @@
+<div class="topDivBanner" style="background-image:url({{movie.imgUrl}})">
+	<div class="bunnerOverlay">
+		<h1>{{movie.title}}</h1>
+		<h5>{{movie.year}}</h5>
+		<p class="topDivText leftItem" id="movieLength">{{movie.runtime}}</p>
+		<p class="topDivText leftItem"id="movieMore">{{movie.plot}}</p>
+
+		<p class="topDivText rightItem" id="movieYT">
+			<a onclick="openLink('http://www.youtube.com/results?search_query={{movie.title}}+Trailer')">Trailer at YouTube
+			</a>
+		</p>
+		<p class="topDivText rightItem"id="movieIMDB">
+			<a onclick="openLink('http://www.imdb.com/title/{{movie.imdbUrl}}/')">
+				IMDB
+			</a>
+		</p>
+	</div>
+</div>
+<div class="topDivDes">
+{{movie.genres}}
+</div>
+
+
+
+<div class="topDivDes">
+<div class="movieOverlayEx showLeft">
+	<a class="asimple" onclick="play('{{movie.torrentUrl}}')" ><i class="fa fa-folder"></i> Play</a>
+</div>
+
+</div>

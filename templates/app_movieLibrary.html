@@ -1,0 +1,16 @@
+<h2 class="contentHeader" id="fine"></h2>
+
+{% for item in items %}
+<div class="item">
+    <span class="placeholder" onclick="showMovieOverlay('{{items.indexOf(item)}}')">
+        {% if item.imgUrl.length > 0 %}
+        <span class="coverImage" style="background-image:url({{item.imgUrl}})"></span>
+        {% else %}
+        <span class="coverImage" style="background-image)"></span>
+        {% endif %}
+    </span>
+    <p>{{item.title}}</p>
+    <p>{{item.year}}</p>
+    <p>{{item.imdbRating}}</p>
+</div>
+{% endfor %}
