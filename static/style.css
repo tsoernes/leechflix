@@ -66,13 +66,14 @@ Movie details
 	background-repeat: no-repeat;
 }
 
-
 .bunnerOverlay {
-	width: 100%;
+	width: auto;
 	height: 100%;
 	background-color: rgba(27, 27, 27,.75);
 	color:#EBEBEB;
-	position: relative;
+	position: inherit;
+	float:left;
+	margin:0px 0px 0px 300px;
 }
 
 .topDivText {
@@ -81,7 +82,7 @@ Movie details
 	font-size: 17px;
 	line-height: 25px;
 	height: 25px;
-	width: 300px;
+	width: inherit;
 	position: absolute;
 	display: inline-block!important;
 }

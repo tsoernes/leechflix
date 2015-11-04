@@ -22,9 +22,6 @@ function fetch(url) {
         if (err) {
             console.log("err" + err);
         } else {
-            res = res.sort(function(b, a) {
-                return parseFloat(a.imdbRating) - parseFloat(b.imdbRating);
-            });
             console.log(res);
             results = res;
             sendItemsToView(res);

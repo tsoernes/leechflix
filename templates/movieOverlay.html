@@ -1,18 +1,15 @@
 {% if movie.imgUrl.length > 0 %}
 <div class="topDivBanner" style="background-image:url({{movie.imgUrl}})">
 {% else %}
-<div class="topDivBanner" style="background-image:url('blank.png')">
+<div class="topDivBanner" style="background-image">
 {% endif %}
 	<div class="bunnerOverlay">
 		<h1>{{movie.title}}</h1>
 		<h5>{{movie.year}}</h5>
 		<p class="topDivText leftItem" id="movieLength">{{movie.runtime}} minutes</p>
 		<p class="topDivText leftItem" id="movieMore">{{movie.genres}}</p>
-
 		<p class="topDivText rightItem" id="movieYT">
-			<a onclick="openLink('http://www.youtube.com/results?search_query={{movie.title}}+Trailer')">
-				Trailer
-			<i class="fa fa-youtube"></i></a>
+			<a onclick="openLink('http://www.youtube.com/results?search_query={{movie.title}}+Trailer')">Trailer<i class="fa fa-youtube"></i></a>
 		</p>
 		<p class="topDivText rightItem" id="movieIMDB">
 			<a onclick="openLink('http://www.imdb.com/title/{{movie.imdbId}}/')">
@@ -29,7 +26,12 @@
 	<table style="border-spacing:20px">
 	{% for release in movie.release %}
 	 <tr>
-		<td><a class="asimple" onclick="openLink('http://www.torrentleech.org{{release.detailsUrl}}')">{{release.rlsDetails}}</a></td>
+		<td>
+			<a class="asimple" onclick="openLink('http://www.torrentleech.org{{release.torrentUrl}}')">
+			<i class="fa fa-download"></i></a>
+			<a class="asimple" onclick="openLink('http://www.torrentleech.org{{release.detailsUrl}}')">
+			{{release.rlsDetails}}</a>
+		</td>
 		<td>{{release.size}}</td>
 		<td><i class="fa fa-arrow-up" style="color:green"></i>{{release.seeders}}</td>
 		<td><i class="fa fa-arrow-down" style="color:red"></i>{{release.leechers}}</td>
