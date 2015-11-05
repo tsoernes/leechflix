@@ -10,12 +10,22 @@ Build with NodeJS for Node-webkit; scraping with cheerio; OMDb API for movie inf
 
 @Todo
 
+Bugfixing:
+
+- spawn video player
+
+Feautures:
+
 -add support for tv shows
 
 -add search
 
--retrieve all releases by search when viewing movie details
+- retrieve all releases by search when viewing movie details
 
--return movies as promises for faster loading
+- return movies as promises for faster loading
 
--revamp gui
+- revamp gui
+
+- add normal torrent download
+
+- launch seeding in external client on finished download
