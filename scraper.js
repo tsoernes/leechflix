@@ -104,13 +104,13 @@ function scrapeTorrents(url, callback) {
 			var info = scraperhelper.extractInfoFromName(name);
 
 			// @TODO add files to a different view if they do not have info or image
-			var searchTerm = {title: info.title, year: info.year};
+			var searchTerm = {terms: info.title, year: info.year};
 			asyncTasks.push(function(callback){
 				getOmdbInfo(searchTerm, function (err, res) {
 					if (err) {
 						var isCollection = true;
 						info.rlsDetails = name;
-						omdbInfo = {title: "Not found in IMDb", runtime: "", actors: "", plot: "", imdb: {id: "", rating: 10, votes: 0}, poster: "../static/folder2.jpg"};
+						omdbInfo = {title: "Not found in IMDb", year: "", runtime: "", actors: "", plot: "", imdb: {id: "", rating: 10, votes: 0}, poster: "../static/folder2.jpg"};
 					} else {
 						omdbInfo = res;
 						var isCollection = false;
@@ -162,20 +162,26 @@ function scrapeTorrents(url, callback) {
 	});
 }
 
-
-
-
 function getOmdbInfo(show, callback) {
-	omdb.get(show, true, function(err, movie) {
-		if(err) {
-			console.log("Get OMDB info err: " + err + " for "+ show.title + " " + show.year);
-			callback(err, null);
-		}
-		if(!movie) {
-			console.log("No OMDB info results for: " + show.title + " " + show.year);
-			callback('Movie not found!', null);
-		} else {
-			callback(null, movie);
+	show.type = 'movie';
+        if(err) {
+            callback(err, null);
+        }
+        if(movies.length == 0) {
+			console.log('No OMDb search results for: ' + show.terms + " " + show.year);
+            callback('No search results for: ' + show.terms + " " + show.year, null);
+        } else {
+			omdb.get(movies[0].imdb, true, function(err, movie) {
+				if(err) {
+					callback(err, null);
+				}
+				if(!movie) {
+					console.log("No OMDb get result for: " + show.terms + " " + show.year + " " + movies[0].imdb);
+					callback('Movie not found!', null);
+				} else {
+					callback(null, movie);
+				}
+			});
 		}
 	});
 }
@@ -234,14 +240,24 @@ function launchWebtorrent(torrentFilePath) {
 		server.close()
 		  client.destroy()
 		*/
+		/*
+		torrent.on('download', function(chunkSize){
+		  console.log('chunk size: ' + chunkSize);
+		  console.log('total downloaded: ' + torrent.downloaded);
+		  console.log('download speed: ' + torrent.downloadSpeed());
+		  console.log('progress: ' + torrent.progress);
+		  console.log('======');
+		  })
+  		*/
 	});
 }
 
 function launchVideoPlayer(url) {
 	var args = [url, '/play'];
-	var superspawn = require('superspawn').spawn;
-	var child = superspawn("C:/Program Files (x86)/MPC-HC/mpc-hc.exe ", url + " /play", function(err) {
-    	if (err) console.log(err);
+	var cspawn = require('cross-spawn');
+	var child = cspawn("C:\Program Files (x86)\MPC-HC\mpc-hc.exe", [url, " /play"]);
+	child.on('error', function (err) {
+		console.log('Failed to start child process.');
 	});
 	/*
 	/start ms		Start playing at "ms" (= milliseconds)
