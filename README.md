@@ -1,5 +1,5 @@
 # leechflix
-Popcorn-Time like movie streamer for www.torrentleech.org
+Popcorn-Time like movie streamer for torrentleech
 
 ![alt text](http://s2.postimg.org/x94xwsn21/main.png "main")
 
