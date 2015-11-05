@@ -104,7 +104,7 @@ function scrapeTorrents(url, callback) {
 			var info = scraperhelper.extractInfoFromName(name);
 
 			// @TODO add files to a different view if they do not have info or image
-			var searchTerm = {terms: info.title, year: info.year};
+			var searchTerm = {terms: info.title, year: info.year, specialChars: true};
 			asyncTasks.push(function(callback){
 				getOmdbInfo(searchTerm, function (err, res) {
 					if (err) {
@@ -114,6 +114,8 @@ function scrapeTorrents(url, callback) {
 					} else {
 						omdbInfo = res;
 						var isCollection = false;
+						omdbInfo.genres = omdbInfo.genres.map(function(s) {return ' '+s;});
+						omdbInfo.genres[0] = omdbInfo.genres[0].substring(1);
 					}
 
 					var movieInfo = {
@@ -164,12 +166,22 @@ function scrapeTorrents(url, callback) {
 
 function getOmdbInfo(show, callback) {
 	show.type = 'movie';
+	omdb.search(show, function(err, movies) {
         if(err) {
             callback(err, null);
         }
         if(movies.length == 0) {
-			console.log('No OMDb search results for: ' + show.terms + " " + show.year);
-            callback('No search results for: ' + show.terms + " " + show.year, null);
+			if (show.specialChars == true) {
+				show.terms = show.terms.replace(/[^a-z0-9\s]/gi, '');
+				show.terms = show.terms.replace(/\s+/g, ' ');
+				show.specialChars = false;
+				getOmdbInfo(show, function(err, res) {
+					callback(err, res);
+				});
+			} else {
+				console.log('No OMDb search results for: ' + show.terms + " " + show.year);
+	            callback('No search results for: ' + show.terms + " " + show.year, null);
+			}
         } else {
 			omdb.get(movies[0].imdb, true, function(err, movie) {
 				if(err) {

@@ -25,7 +25,7 @@ function getShow() {
 }
 
 function getMovie() {
-    var show = { terms: "the Man From Earth x264-DEViSE", year: '', type: 'movie'};
+    var show = { terms: "the Man From Earth", year: '', type: 'movie', specialChars: true};
     show.terms = show.terms.replace(/[^a-z0-9\s]/gi, ''); // Remove special characters for improved search
     show.terms = show.terms.replace(/\s+/g, ' '); // Remove multiple white-spaces which may arise from the previous replace
 	show.terms = show.terms.trim();
@@ -72,4 +72,4 @@ function parseName() {
     console.log(ptn(name).title);
 }
 
-parseName();
+getMovie();
