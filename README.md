@@ -5,20 +5,12 @@ Build with NodeJS for Node-webkit; scraping with cheerio; OMDb API for movie inf
 
 @Todo
 
--don't log in for every request
-
 -add support for tv shows
 
 -add search
 
 -local database or cache
 
--browse next (/page/2 ..)
+-retrieve all releases by search when viewing movie details
 
--browse popular
-
--add backdrops
-
--use native peerflix streaming
-
--serch for all releases when viewing movie details
+-improve omdb search
