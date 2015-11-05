@@ -78,30 +78,14 @@ function goPrevPage() {
     }
 }
 
-function goPage(page) {
-    switch (page) {
-        case "new":
-            currentUrl = config.urls.moviesNew;
-            break;
-        case "pop24h":
-            currentUrl = config.urls.moviesPop24h;
-            break;
-        case "pop48h":
-            currentUrl = config.urls.moviesPop48h;
-            break;
-        case "pop72h":
-            currentUrl = config.urls.moviesPop72h;
-            break;
-        case "pop1w":
-            currentUrl = config.urls.moviesPop1w;
-            break;
-        case "pop2w":
-            currentUrl = config.urls.moviesPop2w;
-            break;
-        case "popAll":
-            currentUrl = config.urls.moviesPopAll;
-            break;
-    }
-
+/*
+Browse most popular movies added in the given timeframe
+*/
+function goPopPage(term) {
+    /*
+    Example valid terms:
+    24HOURS, 1WEEK, 1WEEKS, 2MONTHS, 1YEAR
+    */
+    currentUrl = config.urls.moviesPopBeg + term + config.urls.moviesPopEnd;
     fetch();
 }

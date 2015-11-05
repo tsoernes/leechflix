@@ -158,7 +158,6 @@ function scrapeTorrents(url, callback) {
 		});
 
 		async.parallel(asyncTasks, function(){
-			console.log("Scrape main successful");
 		  	callback(null, results);
 		});
 	});
