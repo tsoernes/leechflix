@@ -9,14 +9,28 @@ var config = require('./config');
 var FileCookieStore = require('tough-cookie-filestore');
 var request = require('request');
 
-fs.writeFile(config.cookiePath, null, { flags: 'wx' }, function (err) {
-    if (err) throw err;
-});
+/*
+Initialize cookie file which store the login info
+*/
+try {
+	fs.openSync(config.cookiePath, 'r');
+} catch (e) {
+	if (e.code === 'ENOENT') {
+		// File not found, so make one
+		fs.writeFileSync(config.cookiePath, "", { flags: 'wx' }, function (err) {
+		    if (err) {
+				console.log(err);
+				throw err;
+			}
+		});
+	} else {
+		console.log(e);
+  		throw e;
+	}
+}
 
 var j = request.jar(new FileCookieStore(config.cookiePath));
 request = request.defaults({ jar : j });
-
-var loggedIn = false;
 
 
 exports.fetch = function(url, callback) {
@@ -30,15 +44,16 @@ exports.fetch = function(url, callback) {
 					console.log(err);
 					callback(err, null);
 				} else {
-					callback(null, results);
+					callback(null,
+						scraperhelper.sortMoviesByImdbRating(
+							scraperhelper.sortReleasesBySeeders(results)));
 				}
 			});
 		}
 	});
 }
 
-//login(function() {});
-console.log(j.getCookies('http://torrentleech.org'));
+
 /*
 Check if the stored cookie is valid, and logs in if not
 */
@@ -54,7 +69,7 @@ function checkLogin(callback) {
 
 function login(callback) {
 	request.post({
-		uri: config.loginUrl,
+		uri: config.urls.login,
 		headers: { 'content-type': 'application/x-www-form-urlencoded' },
 		body: require('querystring').stringify(config.credentials)
 	}, function(err, res, body){
@@ -93,12 +108,16 @@ function scrapeTorrents(url, callback) {
 			asyncTasks.push(function(callback){
 				getOmdbInfo(searchTerm, function (err, res) {
 					if (err) {
-						omdbInfo = {runtime: "", actors: "", plot: "", imdb: {id: "", rating: 0, votes: 0}, poster: ""};
+						var isCollection = true;
+						info.rlsDetails = name;
+						omdbInfo = {title: "Not found in IMDb", runtime: "", actors: "", plot: "", imdb: {id: "", rating: 10, votes: 0}, poster: "../static/folder2.jpg"};
 					} else {
 						omdbInfo = res;
+						var isCollection = false;
 					}
 
 					var movieInfo = {
+						isCollection: isCollection,
 						title: omdbInfo.title,
 						year: omdbInfo.year,
 						release: [{

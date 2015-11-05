@@ -2,20 +2,20 @@
   "name": "leechflix",
   "main": "templates/main.html",
   "window": {
-    "toolbar": true,
-    "width": 1110,
-    "min_width":850,
-    "height": 600,
-    "min_height":550,
-    "position":"center"
+    "toolbar":      true,
+    "width":        1110,
+    "min_width":    850,
+    "height":       600,
+    "min_height":   550,
+    "position":     "center"
   },
   "dependencies": {
-    "omdb"      :"*",
-    "swig"      :"*",
     "async"     :"*",
     "cheerio"   :"*",
-    "q"         :"*",
     "request"   :"*",
-    "peerflix"  :"*"
+    "peerflix"  :"*",
+    "q"         :"*",
+    "swig"      :"*",
+    "omdb"      :"*"
   }
 }

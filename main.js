@@ -1,45 +1,44 @@
 var gui = require('nw.gui');
 var scraper = require('../scraper.js');
 var config = require('../config.js');
+var swig = require('swig');
 
-var swig = 					require('swig');
-var appTemplate = 			swig.compileFile('templates/app.html');
-var movieLibraryTemplate =   swig.compileFile('templates/app_movieLibrary.html');
-var movieDetails            = swig.compileFile('templates/movieDetails.html')
-var mOverlayTemplate = 		swig.compileFile('templates/movieOverlay.html');
+var appTemplate             = swig.compileFile('templates/app.html');
+var movieLibraryTemplate    = swig.compileFile('templates/movieLibrary.html');
+var movieDetails        = swig.compileFile('templates/movieDetails.html');
 
-// Search: https://torrentleech.org/torrents/browse/index/query/mission+impossible/categories/13%2C14/facets/tags%253Anonscene
 
-var results;
 
+var currentMovies;
+var currentUrl;
 function start() {
-	appStatus="showMain";
-    fetch(config.browseMoviesUrl);
+    currentUrl = config.urls.moviesNew;
+    fetch(currentUrl);
 }
 
-function fetch(url) {
-    scraper.fetch(url, function(err, res) {
+function fetch() {
+    scraper.fetch(currentUrl, function(err, res) {
         if (err) {
             console.log("err" + err);
         } else {
-            console.log(res);
-            results = res;
-            sendItemsToView(res);
+            currentMovies = res;
+            sendItemsToView();
         }
     });
 }
 
-function play(url) {
-    scraper.play(url);
+function play(torrentUrl) {
+    scraper.play(torrentUrl);
 }
 
-function sendItemsToView(movies) {
+function sendItemsToView() {
     document.body.innerHTML = (appTemplate());
-	if(movies !== null){
-		document.getElementById('movieLibrary_content').innerHTML = (movieLibraryTemplate({items:movies}));
-	}
-	else  document.getElementById('movieLibrary_content').innerHTML = "";
-    initUI();
+	if(currentMovies !== null){
+		document.getElementById('movieLibrary_content').innerHTML = (movieLibraryTemplate({movies:currentMovies}));
+	} else {
+        document.getElementById('movieLibrary_content').innerHTML = "";
+    }
+	initUI();
 }
 
 function initUI() {
@@ -47,18 +46,62 @@ function initUI() {
 }
 
 function showMovieOverlay(position) {
-	overlayNumber=parseInt(position);
-	if(results[overlayNumber]==undefined) {
-		overlayType="no"
-	}
-	else {
-		overlayType="movie";
-		var movie = results[position];
-		document.getElementById("overlayMovie").innerHTML = (mOverlayTemplate({movie:movie}));
-		$('#overlayMovie').trigger('openModal');
-	}
+	var movie = currentMovies[position];
+    document.getElementById("overlayMovie").innerHTML = (movieDetails({movie:movie}));
+    $('#overlayMovie').trigger('openModal');
+}
+
+function getSearchUrl(term) {
+    return config.urls.searchBeg; + term.replace(" ", "+") + config.urls.searchEnd;
 }
 
 function openLink(link) {
 	gui.Shell.openExternal(link);
+}
+
+/*
+Page navigation
+*/
+
+function goNextPage() {
+    var index = parseInt(currentUrl.substring(currentUrl.length-1, currentUrl.length)) + 1;
+    currentUrl = currentUrl.substring(0, currentUrl.length-1) + index.toString();
+    fetch();
+}
+
+function goPrevPage() {
+    var index = parseInt(currentUrl.substring(currentUrl.length-1, currentUrl.length))
+    if (index > 1) {
+        index = index - 1;
+        currentUrl = currentUrl.substring(0, currentUrl.length-1) + index.toString();
+        fetch();
+    }
+}
+
+function goPage(page) {
+    switch (page) {
+        case "new":
+            currentUrl = config.urls.moviesNew;
+            break;
+        case "pop24h":
+            currentUrl = config.urls.moviesPop24h;
+            break;
+        case "pop48h":
+            currentUrl = config.urls.moviesPop48h;
+            break;
+        case "pop72h":
+            currentUrl = config.urls.moviesPop72h;
+            break;
+        case "pop1w":
+            currentUrl = config.urls.moviesPop1w;
+            break;
+        case "pop2w":
+            currentUrl = config.urls.moviesPop2w;
+            break;
+        case "popAll":
+            currentUrl = config.urls.moviesPopAll;
+            break;
+    }
+
+    fetch();
 }

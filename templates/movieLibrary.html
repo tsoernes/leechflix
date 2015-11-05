@@ -1,0 +1,14 @@
+{% for movie in movies %}
+<div class="item">
+    <span class="placeholder" onclick="showMovieOverlay('{{movies.indexOf(movie)}}')">
+        {% if movie.imgUrl.length > 0 %}
+        <span class="coverImage" style="background-image:url({{movie.imgUrl}})"></span>
+        {% else %}
+        <span class="coverImage" style="background-image"></span>
+        {% endif %}
+    </span>
+    <p class="titleText"> {{movie.title}} </p>
+    <p class="infoText leftInfoItem"> {{movie.year}} </p>
+    <p class="infoText rightInfoItem"> {{movie.imdbRating}} </p>
+</div>
+{% endfor %}

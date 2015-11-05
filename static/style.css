@@ -71,7 +71,7 @@ Movie details
 	height: 100%;
 	background-color: rgba(27, 27, 27,.75);
 	color:#EBEBEB;
-	position: inherit;
+	position: relative;
 	float:left;
 	margin:0px 0px 0px 300px;
 }
@@ -704,7 +704,105 @@ input.cmn-toggle-round:checked + label:after {
   content: "OFF";
 }
 
+/*
+Navigation bar
+*/
+nav ul {
+    display: block;
+    position: relative;
+	list-style: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 5px;
+    z-index: 5001;
+}
 
+nav ul li {
+    display: list-item;
+    float: left;
+    list-style: none;
+    background-color: #0c3f61;
+}
+
+nav ul li a {
+    display: block;
+	text-decoration: none;
+    padding: 10px 19px;
+    color: #ffffff;
+}
+
+nav li a:hover {
+	opacity: 0.9;
+}
+
+nav ul ul {
+    display: none;				/* Hide Dropdowns by Default */
+    position: absolute;
+    top: 42px;
+}
+
+nav ul li:hover > ul {
+    display: list-item;			/* Display Dropdowns on Hover */
+}
+
+nav ul ul li {
+    position: relative;			/* Menu Dropdown */
+    float: none;
+    width: 140px;
+}
+
+nav ul ul ul li {
+    position: absolute relative; /* Sub Menu Dropdown */
+    top: -42px;
+    left: 140px;
+}
+
+ul li > a:after {
+	content: '  \25BE';			/* Dropdown Menu Symbol Down */
+}
+
+ul ul li > a:after {
+	content: '  \25B8';			/* Dropdown Sub Menu Symbol Right */
+}
+
+nav li > a:only-child:after {
+	content: '';
+}
+
+
+nav ul li:first-of-type {
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+nav ul li:last-of-type {
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+nav ul ul li:first-of-type {
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+}
+
+nav ul ul li:last-of-type {
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+nav ul ul ul li:first-of-type {
+	border-top-right-radius: 5px;
+}
+
+nav ul ul ul li:last-of-type {
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+/*
+
+*/
 
 ::-webkit-scrollbar {
     width: 13px;
