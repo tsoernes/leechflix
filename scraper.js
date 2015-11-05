@@ -8,7 +8,7 @@ var omdb = require('omdb');
 var config = require('./config');
 var FileCookieStore = require('tough-cookie-filestore');
 var request = require('request');
-
+var WebTorrent = require('webtorrent');
 /*
 Initialize cookie file which store the login info
 */
@@ -177,5 +177,85 @@ function getOmdbInfo(show, callback) {
 		} else {
 			callback(null, movie);
 		}
+	});
+}
+
+var spawn = require('child_process').spawn;
+var config = require('./config');
+var fs = require('fs');
+
+exports.play = function(torrentUrl) {
+	downloadTorrent(torrentUrl, function(err, path) {
+		if (err) {
+			console.log(err);
+		} else {
+			launchWebtorrent(path);
+		}
+	});
+}
+
+function downloadTorrent(url, callback) {
+	var filename = url.split("/");
+    var dir = config.torrentDir;
+	if (!fs.existsSync(dir)){
+	    fs.mkdirSync(dir);
+	}
+	var path = dir + filename[filename.length - 1];
+	var url = "http://torrentleech.org" + url;
+	request({uri: url})
+		.on('error', function(err) {
+			console.log("Download torrent err: " + err + " for " + url);
+			callback(err, null);
+			return;
+		})
+		.pipe(fs.createWriteStream(path))
+      	.on('close', function() {
+        	callback(null, path);
+    	}
+	);
+}
+
+function launchWebtorrent(torrentFilePath) {
+	client = new WebTorrent();
+	client.add(torrentFilePath, function ontorrent (torrent) {
+		var server = torrent.createServer();
+
+  		server.listen(8888);
+		biggestIdx = 0;
+		for (var i=1; i<torrent.files.length; i++) {
+			if (torrent.files[i].length > torrent.files[biggestIdx].length) {
+				biggestIdx = i;
+			}
+		}
+		var url = "http://localhost:8888/" + biggestIdx
+		console.log(torrent.files[biggestIdx].name + " available at " + url);
+		launchVideoPlayer(url);
+		/*
+		server.close()
+		  client.destroy()
+		*/
+	});
+}
+
+function launchVideoPlayer(url) {
+	var args = [url, '/play'];
+	var superspawn = require('superspawn').spawn;
+	var child = superspawn("C:/Program Files (x86)/MPC-HC/mpc-hc.exe ", url + " /play", function(err) {
+    	if (err) console.log(err);
+	});
+	/*
+	/start ms		Start playing at "ms" (= milliseconds)
+/startpos hh:mm:ss	Start playing at position hh:mm:ss
+	*/
+}
+
+function launchPeerflix(torrentFilePath, args) {
+	// Torrent location is relative to the location of this script
+    if (typeof args === 'undefined' || args == "") {
+        args = "--mpchc";
+    }
+	var child = spawn('cmd', ['/c', 'peerflix', torrentFilePath, args]);
+	child.on('error', function (err) {
+		console.log('Failed to start child process.');
 	});
 }
