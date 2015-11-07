@@ -1,22 +1,38 @@
 var gui = require('nw.gui')
-var scraper = require('../scraper.js')
-var config = require('../config.js')
 var swig = require('swig')
-
-var appTemplate = swig.compileFile('templates/app.html')
-var movieLibraryTemplate = swig.compileFile('templates/movieLibrary.html')
-var movieDetails = swig.compileFile('templates/movieDetails.html')
+var fs = require('fs')
+var tlscraper = require('./scrapers/tl.js')
+var streamer = require('./streamer.js')
+var config = require('./config.js')
+var async = require('async')
+var appTemplate = swig.compileFile('./templates/app.html')
+var movieLibraryTemplate = swig.compileFile('./templates/movieLibrary.html')
+var movieDetails = swig.compileFile('./templates/movieDetails.html')
 
 var currentMovies
 var currentUrl
 
 function start () {
-  currentUrl = config.urls.moviesNew
-  fetch(currentUrl)
+  initCore(function () {
+    currentUrl = config.urls.moviesNew
+    fetch(currentUrl)
+  })
+}
+
+function initCore (callback) {
+  async.series([
+    function (done) {
+      tlscraper.login(function (err) {
+        done(err)
+      })
+    }
+  ], function (err) {
+    callback(err)
+  })
 }
 
 function fetch () {
-  scraper.fetch(currentUrl, function (err, res) {
+  tlscraper.fetch(currentUrl, function (err, res) {
     if (err) {
       console.log('err' + err)
     } else {
@@ -27,7 +43,10 @@ function fetch () {
 }
 
 function play (torrentUrl) {
-  scraper.play(torrentUrl)
+  tlscraper.downloadTorrent(torrentUrl, function (err, path) {
+    if (err) console.log(err)
+    else streamer.play(path)
+  })
 }
 
 function sendItemsToView () {
@@ -83,8 +102,13 @@ Browse most popular movies added in the given timeframe
 function goPopPage (term) {
   /*
   Example valid terms:
-  24HOURS, 1WEEK, 1WEEKS, 2MONTHS, 1YEAR
+  24HOURS, 7DAYS, 2MONTHS, 1YEAR (weeks not working..?)
   */
   currentUrl = config.urls.moviesPopBeg + term + config.urls.moviesPopEnd
+  fetch()
+}
+
+function goNewPage () {
+  currentUrl = config.urls.moviesNew
   fetch()
 }

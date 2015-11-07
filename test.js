@@ -24,7 +24,7 @@ function getShow () {
 }
 
 function getMovie () {
-  var show = {terms: 'asd', year: '', type: 'movie', specialChars: true}
+  var show = {terms: 'throw away your books', year: '', type: 'movie', specialChars: true}
   show.terms = show.terms.replace(/[^a-z0-9\s]/gi, '') // Remove special characters for improved search
   show.terms = show.terms.replace(/\s+/g, ' ') // Remove multiple white-spaces which may arise from the previous replace
   show.terms = show.terms.trim()

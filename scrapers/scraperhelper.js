@@ -15,15 +15,21 @@ exports.extractInfoFromName = function (name) {
   return ({
     title: parsed.title,
     year: parsed.year.toString(),
-    rlsDetails: rlsDetails
+    rlsDetails: rlsDetails.trim()
   })
+}
+
+exports.sort = function (movies) {
+  return sortNoPostersLast(
+  sortMoviesByImdbRating(
+  sortReleasesBySeeders(movies)))
 }
 
 /*
 Sort the releases of each movie by the number of seeders in descending
 order.
 */
-exports.sortReleasesBySeeders = function (movies) {
+function sortReleasesBySeeders (movies) {
   for (var i = 0 ; i < movies.length; i++) {
     movies[i].release = movies[i].release.sort(function (b, a) {
       return parseFloat(a.seeders) - parseFloat(b.seeders)
@@ -36,8 +42,24 @@ exports.sortReleasesBySeeders = function (movies) {
 Sort the movies the IMDb rating in descending
 order.
 */
-exports.sortMoviesByImdbRating = function (movies) {
+function sortMoviesByImdbRating (movies) {
   return movies.sort(function (b, a) {
+    if (typeof a.imdbRating === 'undefined' || typeof b.imdbRating === 'undefined') {
+      console.log('Tried to sort undefined IMDb ratings')
+    }
     return parseFloat(a.imdbRating) - parseFloat(b.imdbRating)
   })
+}
+
+function sortNoPostersLast (movies) {
+  var withPoster = []
+  var noPoster = []
+  for (var i = 0; i < movies.length; i++) {
+    if (movies[i].imgUrl === null) {
+      noPoster.push(movies[i])
+    } else {
+      withPoster.push(movies[i])
+    }
+  }
+  return withPoster.concat(noPoster)
 }

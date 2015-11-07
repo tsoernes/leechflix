@@ -1,6 +1,6 @@
 {
   "name": "leechflix",
-  "main": "templates/main.html",
+  "main": "main.html",
   "window": {
     "toolbar":      true,
     "width":        1110,

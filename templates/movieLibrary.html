@@ -9,6 +9,10 @@
     </span>
     <p class="titleText"> {{movie.title}} </p>
     <p class="infoText leftInfoItem"> {{movie.year}} </p>
+    {% if movie.imdbRating === 11 %}
+    <p class="infoText centerInfoItem"> {{movie.release.length}} movies </p>
+    {% else %}
     <p class="infoText rightInfoItem"> {{movie.imdbRating}} </p>
+    {% endif %}
 </div>
 {% endfor %}
