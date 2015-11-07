@@ -29,9 +29,9 @@
 	{% for release in movie.release %}
 	 <tr>
 		<td>
-			<a class="asimple" onclick="openLink('http://www.torrentleech.org{{release.torrentUrl}}')">
+			<a class="asimple" onclick="openLink('{{release.torrentUrl}}')">
 			<i class="fa fa-download"></i></a>
-			<a class="asimple" onclick="openLink('http://www.torrentleech.org{{release.detailsUrl}}')">
+			<a class="asimple" onclick="openLink('{{release.detailsUrl}}')">
 			{{release.rlsDetails}}</a>
 		</td>
 		<td>{{release.size}}</td>

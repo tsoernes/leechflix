@@ -7,6 +7,7 @@ function getOmdbInfo (show, i, callback) {
   // Clean up search term
   show.terms = show.terms.replace(/720p/ig, '')
   show.terms = show.terms.replace(/1080p/ig, '')
+  show.terms = show.terms.replace(/bdrip/ig, '')
   show.terms = show.terms.replace(/imax/ig, '')
   show.terms = show.terms.replace(/unrated/ig, '').trim()
   omdb.search(show, function (err, movies) {
@@ -30,7 +31,7 @@ function getOmdbInfo (show, i, callback) {
         })
         return
       } else {
-        console.log('No OMDb search results for: ' + show.terms + ' ' + show.year)
+        console.log('No results OMDb:' + show.terms + ' ' + show.year)
         var notFound = {
           title: 'Not found in IMDb',
           year: '',

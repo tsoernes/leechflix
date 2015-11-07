@@ -1,20 +1,25 @@
 var gui = require('nw.gui')
 var swig = require('swig')
-var fs = require('fs')
+var async = require('async')
+
+var scrapermain = require('./scrapers/scrapermain.js')
 var tlscraper = require('./scrapers/tl.js')
+var iptscraper = require('./scrapers/ipt.js')
 var streamer = require('./streamer.js')
 var config = require('./config.js')
-var async = require('async')
+
 var appTemplate = swig.compileFile('./templates/app.html')
 var movieLibraryTemplate = swig.compileFile('./templates/movieLibrary.html')
 var movieDetails = swig.compileFile('./templates/movieDetails.html')
 
+var currentScraper
 var currentMovies
 var currentUrl
 
 function start () {
   initCore(function () {
-    currentUrl = config.urls.moviesNew
+    currentUrl = config.urls.ipt.moviesNew
+    setIptScraper()
     fetch(currentUrl)
   })
 }
@@ -22,7 +27,12 @@ function start () {
 function initCore (callback) {
   async.series([
     function (done) {
-      tlscraper.login(function (err) {
+      scrapermain.login(config.urls.tl.login, config.credentials.tl, function (err) {
+        done(err)
+      })
+    },
+    function (done) {
+      scrapermain.login(config.urls.ipt.login, config.credentials.ipt, function (err) {
         done(err)
       })
     }
@@ -32,7 +42,7 @@ function initCore (callback) {
 }
 
 function fetch () {
-  tlscraper.fetch(currentUrl, function (err, res) {
+  scrapermain.fetch(currentUrl, currentScraper, function (err, res) {
     if (err) {
       console.log('err' + err)
     } else {
@@ -43,7 +53,7 @@ function fetch () {
 }
 
 function play (torrentUrl) {
-  tlscraper.downloadTorrent(torrentUrl, function (err, path) {
+  scrapermain.downloadTorrent(torrentUrl, function (err, path) {
     if (err) console.log(err)
     else streamer.play(path)
   })
@@ -69,8 +79,8 @@ function showMovieOverlay (position) {
   $('#overlayMovie').trigger('openModal')
 }
 
-function getSearchUrl (term) {
-  return config.urls.searchBeg + term.replace(' ', '+') + config.urls.searchEnd
+function getTlSearchUrl (term) {
+  return config.urls.tl.searchBeg + term.replace(' ', '+') + config.urls.tl.searchEnd
 }
 
 function openLink (link) {
@@ -81,13 +91,13 @@ function openLink (link) {
 Page navigation
 */
 
-function goNextPage () {
+function goTlNextPage () {
   var index = parseInt(currentUrl.substring(currentUrl.length - 1, currentUrl.length)) + 1
   currentUrl = currentUrl.substring(0, currentUrl.length - 1) + index.toString()
   fetch()
 }
 
-function goPrevPage () {
+function goTlPrevPage () {
   var index = parseInt(currentUrl.substring(currentUrl.length - 1, currentUrl.length))
   if (index > 1) {
     index = index - 1
@@ -99,16 +109,32 @@ function goPrevPage () {
 /*
 Browse most popular movies added in the given timeframe
 */
-function goPopPage (term) {
+function goTlPopPage (term) {
   /*
   Example valid terms:
   24HOURS, 7DAYS, 2MONTHS, 1YEAR (weeks not working..?)
   */
-  currentUrl = config.urls.moviesPopBeg + term + config.urls.moviesPopEnd
+  currentUrl = config.urls.tl.moviesPopBeg + term + config.urls.tl.moviesPopEnd
+  setTlScraper()
   fetch()
 }
 
-function goNewPage () {
-  currentUrl = config.urls.moviesNew
+function goTlNewPage () {
+  currentUrl = config.urls.tl.moviesNew
+  setTlScraper()
   fetch()
+}
+
+function goIptNewPage () {
+  currentUrl = config.urls.ipt.moviesNew
+  setIptScraper()
+  fetch()
+}
+
+function setTlScraper() {
+  currentScraper = tlscraper
+}
+
+function setIptScraper() {
+  currentScraper = iptscraper
 }
