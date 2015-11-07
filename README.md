@@ -23,15 +23,14 @@ Only supports Windows x64 with MPC-HC
 
 Bugfixing:
 
-- spawn video player
+- webtorrent memory leak
 
 Feautures:
 
-- add support for tv shows
-- add search
+- support for tv shows
+- search
 - retrieve all releases by search when viewing movie details
 - return movies as promises for faster loading
 - revamp gui
-- add normal torrent download
-
 - launch seeding in external client on finished download
+- support for iptorrents
