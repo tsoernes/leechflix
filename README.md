@@ -1,5 +1,5 @@
 # leechflix
-Popcorn-Time like movie streamer for torrentleech
+Popcorn-Time like movie streamer for torrentleech & iptorrents
 
 **Usage**
 
@@ -30,7 +30,5 @@ Feautures:
 - support for tv shows
 - search
 - retrieve all releases by search when viewing movie details
-- return movies as promises for faster loading
 - revamp gui
-- launch seeding in external client on finished download
-- support for iptorrents
+- implement seeding of previously streamed torrents or launch seeding in external client on finished download
