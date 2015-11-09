@@ -51,6 +51,8 @@ exports.fetch = function (url, scraper, callback) {
     }
   ],
   function (err) {
+    if (err) console.log(err)
+    console.log('scraped: ' + url)
     callback(err, sortres)
   })
 }

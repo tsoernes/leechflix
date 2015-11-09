@@ -6,12 +6,14 @@ var async = require('async')
 var scrapermain, tlscraper, iptscraper
 var initcookie = require('./initcookie').init()
 .then(function () {
+  console.log('loading modules')
   scrapermain = require('./scrapers/scrapermain.js')
   tlscraper = require('./scrapers/tl.js')
   iptscraper = require('./scrapers/ipt.js')
 })
 .catch(function (e) {
   console.log(e)
+  throw(e)
 })
 
 var streamer = require('./streamer.js')
@@ -32,7 +34,7 @@ function start () {
 }
 
 function initCore (callback) {
-  async.parallel([
+  async.series([
     function (done) {
       scrapermain.login(config.urls.tl.login, config.credentials.tl, function (err) {
         done(err)
