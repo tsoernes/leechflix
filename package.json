@@ -2,20 +2,22 @@
   "name": "leechflix",
   "main": "main.html",
   "window": {
-    "toolbar":      true,
-    "width":        1110,
-    "min_width":    850,
-    "height":       600,
-    "min_height":   550,
-    "position":     "center"
+    "toolbar": true,
+    "width": 1110,
+    "min_width": 850,
+    "height": 600,
+    "min_height": 550,
+    "position": "center"
   },
   "dependencies": {
-    "async"     :"*",
-    "cheerio"   :"*",
-    "request"   :"*",
-    "peerflix"  :"*",
-    "q"         :"*",
-    "swig"      :"*",
-    "omdb"      :"*"
+    "async": "*",
+    "cheerio": "*",
+    "nodelint": "^0.6.2",
+    "omdb": "*",
+    "peerflix": "*",
+    "webtorrent": "*",
+    "q": "*",
+    "request": "*",
+    "swig": "*"
   }
 }

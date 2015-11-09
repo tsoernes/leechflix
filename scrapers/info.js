@@ -1,5 +1,6 @@
+'use strict'
 var async = require('async')
-var scraperhelper = require('./scraperhelper')
+var scraperhelper = require('./scraperhelper.js')
 var omdb = require('omdb')
 
 function getOmdbInfo (show, i, callback) {
@@ -31,7 +32,7 @@ function getOmdbInfo (show, i, callback) {
         })
         return
       } else {
-        console.log('No results OMDb:' + show.terms + ' ' + show.year)
+        console.log('No results OMDb: ' + show.terms + ' ' + show.year)
         var notFound = {
           title: 'Not found in IMDb',
           year: '',
@@ -95,7 +96,8 @@ exports.getInfo = function (movies, callback) {
             torrentUrl: movie.torrentUrl,
             size: movie.size,
             seeders: movie.seeders,
-            leechers: movie.leechers
+            leechers: movie.leechers,
+            freeleech: movie.freeleech
           }],
           runtime: omdbInfo.runtime,
           genres: omdbInfo.genres,
@@ -104,13 +106,15 @@ exports.getInfo = function (movies, callback) {
           imdbId: omdbInfo.imdb.id,
           imdbRating: omdbInfo.imdb.rating,
           imdbVotes: omdbInfo.imdb.votes,
-          imgUrl: omdbInfo.poster
+          imgUrl: omdbInfo.poster,
+          hasfreeleech: movie.freeleech
         }
 
         var added = false
         for (var j = 0; j < results.length; j++) {
           if (results[j].imdbId === movieInfo.imdbId) {
             results[j].release.push(movieInfo.release[0])
+            if (movieInfo.release[0].freeleech) results[j].hasfreeleech = true
             added = true
             break
           }

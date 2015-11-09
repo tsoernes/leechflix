@@ -1,10 +1,19 @@
+'use strict'
 var gui = require('nw.gui')
 var swig = require('swig')
 var async = require('async')
 
-var scrapermain = require('./scrapers/scrapermain.js')
-var tlscraper = require('./scrapers/tl.js')
-var iptscraper = require('./scrapers/ipt.js')
+var scrapermain, tlscraper, iptscraper
+var initcookie = require('./initcookie').init()
+.then(function () {
+  scrapermain = require('./scrapers/scrapermain.js')
+  tlscraper = require('./scrapers/tl.js')
+  iptscraper = require('./scrapers/ipt.js')
+})
+.catch(function (e) {
+  console.log(e)
+})
+
 var streamer = require('./streamer.js')
 var config = require('./config.js')
 
@@ -12,9 +21,7 @@ var appTemplate = swig.compileFile('./templates/app.html')
 var movieLibraryTemplate = swig.compileFile('./templates/movieLibrary.html')
 var movieDetails = swig.compileFile('./templates/movieDetails.html')
 
-var currentScraper
-var currentMovies
-var currentUrl
+var currentScraper, currentMovies, currentUrl
 
 function start () {
   initCore(function () {
@@ -25,7 +32,7 @@ function start () {
 }
 
 function initCore (callback) {
-  async.series([
+  async.parallel([
     function (done) {
       scrapermain.login(config.urls.tl.login, config.credentials.tl, function (err) {
         done(err)
@@ -37,7 +44,8 @@ function initCore (callback) {
       })
     }
   ], function (err) {
-    callback(err)
+    if (err) console.log(err)
+    callback()
   })
 }
 
@@ -79,10 +87,6 @@ function showMovieOverlay (position) {
   $('#overlayMovie').trigger('openModal')
 }
 
-function getTlSearchUrl (term) {
-  return config.urls.tl.searchBeg + term.replace(' ', '+') + config.urls.tl.searchEnd
-}
-
 function openLink (link) {
   gui.Shell.openExternal(link)
 }
@@ -92,13 +96,13 @@ Page navigation
 */
 
 function goTlNextPage () {
-  var index = parseInt(currentUrl.substring(currentUrl.length - 1, currentUrl.length)) + 1
+  var index = parseInt(currentUrl.substring(currentUrl.length - 1, currentUrl.length), 10) + 1
   currentUrl = currentUrl.substring(0, currentUrl.length - 1) + index.toString()
   fetch()
 }
 
 function goTlPrevPage () {
-  var index = parseInt(currentUrl.substring(currentUrl.length - 1, currentUrl.length))
+  var index = parseInt(currentUrl.substring(currentUrl.length - 1, currentUrl.length), 10)
   if (index > 1) {
     index = index - 1
     currentUrl = currentUrl.substring(0, currentUrl.length - 1) + index.toString()
@@ -125,16 +129,20 @@ function goTlNewPage () {
   fetch()
 }
 
+function getTlSearchUrl (term) {
+  return config.urls.tl.searchBeg + term.replace(' ', '+') + config.urls.tl.searchEnd
+}
+
 function goIptNewPage () {
   currentUrl = config.urls.ipt.moviesNew
   setIptScraper()
   fetch()
 }
 
-function setTlScraper() {
+function setTlScraper () {
   currentScraper = tlscraper
 }
 
-function setIptScraper() {
+function setIptScraper () {
   currentScraper = iptscraper
 }

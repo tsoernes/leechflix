@@ -1,13 +1,17 @@
 {% for movie in movies %}
 <div class="item">
-    <span class="placeholder" onclick="showMovieOverlay('{{movies.indexOf(movie)}}')">
+    <span class="placeholder" onclick="showMovieOverlay( '{{movies.indexOf(movie)}}' )">
         {% if movie.imgUrl.length > 0 %}
-        <span class="coverImage" style="background-image:url({{movie.imgUrl}})"></span>
+        <span class="coverImage" style="background-image:url( {{movie.imgUrl}} )"></span>
         {% else %}
         <span class="coverImage" style="background-image"></span>
         {% endif %}
     </span>
-    <p class="titleText"> {{movie.title}} </p>
+    <p class="titleText">
+    {% if movie.hasfreeleech %} 
+    <i class="fa fa-star" style='color:green'></i>
+    {% endif %}
+    {{movie.title}} </p>
     <p class="infoText leftInfoItem"> {{movie.year}} </p>
     {% if movie.imdbRating === 11 %}
     <p class="infoText centerInfoItem"> {{movie.release.length}} movies </p>

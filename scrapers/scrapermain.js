@@ -1,3 +1,4 @@
+'use strict'
 var scraperhelper = require('./scraperhelper.js')
 var config = require('../config.js')
 var fs = require('fs')
@@ -5,20 +6,6 @@ var FileCookieStore = require('tough-cookie-filestore')
 var request = require('request')
 var async = require('async')
 var movieinfo = require('./info.js')
-
-// Initialize cookie file which stores the login info
-try {
-  fs.openSync(config.cookiePath, 'r')
-} catch (e) {
-  if (e.code === 'ENOENT') {
-    // File not found, so make one
-    fs.writeFileSync(config.cookiePath, '', { flags: 'wx' }, function (err) {
-      if (err) { throw (err) }
-    })
-  } else {
-    throw (e)
-  }
-}
 var j = request.jar(new FileCookieStore(config.cookiePath))
 request = request.defaults({ jar: j })
 
@@ -29,17 +16,21 @@ exports.login = function (url, credentials, callback) {
     body: require('querystring').stringify(credentials)
   }, function (err, res, body) {
     if (err) {
+      console.log(err)
       callback(err)
     } else {
+      console.log("Logged in at: " + url)
       callback()
     }
   })
 }
 
+/*
+Scrape torrents from a site with a list of torrents, then find OMDb info about
+these torrents, then sort the result
+*/
 exports.fetch = function (url, scraper, callback) {
-  var scraperes
-  var infores
-  var sortres
+  var scraperes, infores, sortres
 
   async.waterfall([
     function (done) {
@@ -64,6 +55,9 @@ exports.fetch = function (url, scraper, callback) {
   })
 }
 
+/*
+Download torrent file and save to disk
+*/
 exports.downloadTorrent = function (url, callback) {
   var dir = config.torrentDir
   if (!fs.existsSync(dir)) {
@@ -71,8 +65,7 @@ exports.downloadTorrent = function (url, callback) {
   }
   var filename = url.split('/')
   var path = dir + filename[filename.length - 1]
-  var uri = config.urls.tl.main + url
-  request({uri: uri})
+  request({uri: url})
     .on('error', function (err) {
       console.log('Download torrent err: ' + err + ' for ' + url)
       callback(err, null)

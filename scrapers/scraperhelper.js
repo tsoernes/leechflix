@@ -1,3 +1,4 @@
+'use strict'
 var ptn = require('parse-torrent-name')
 
 /*
@@ -30,10 +31,11 @@ Sort the releases of each movie by the number of seeders in descending
 order.
 */
 function sortReleasesBySeeders (movies) {
+  function s (a, b) {
+    return parseFloat(b.seeders) - parseFloat(a.seeders)
+  }
   for (var i = 0 ; i < movies.length; i++) {
-    movies[i].release = movies[i].release.sort(function (b, a) {
-      return parseFloat(a.seeders) - parseFloat(b.seeders)
-    })
+    movies[i].release = movies[i].release.sort(s)
   }
   return movies
 }
@@ -51,6 +53,10 @@ function sortMoviesByImdbRating (movies) {
   })
 }
 
+/*
+Puts movies without a poster last in the array. A previous sorting, if any,
+is maintained within the two new subgroups
+*/
 function sortNoPostersLast (movies) {
   var withPoster = []
   var noPoster = []

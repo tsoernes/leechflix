@@ -1,15 +1,17 @@
+'use strict'
 var spawn = require('child_process').spawn
 var WebTorrent = require('webtorrent')
 var config = require('./config.js')
+var server, client
 
 exports.play = function (torrentFilePath) {
   launchWebtorrent(torrentFilePath)
 }
 
 function launchWebtorrent (torrentFilePath) {
-  var client = new WebTorrent()
+  client = new WebTorrent()
   client.add(torrentFilePath, function ontorrent (torrent) {
-    var server = torrent.createServer()
+    server = torrent.createServer()
     server.listen(config.port)
     var biggestIdx = 0
     for (var i = 1 ; i < torrent.files.length; i++) {
@@ -22,8 +24,7 @@ function launchWebtorrent (torrentFilePath) {
     launchVideoPlayer(url)
 		/*
     @TODO: need to close and destroy when finished wathcing movie
-		server.close()
-		client.destroy()
+
 		*/
 		/*
     @TODO feature: show download progress
@@ -40,13 +41,17 @@ function launchWebtorrent (torrentFilePath) {
 
 function launchVideoPlayer (url) {
   /*
-  @TODO feature: remember playing position and resume there
   /start ms		Start playing at "ms" (= milliseconds)
   /startpos hh:mm:ss	Start playing at position hh:mm:ss
   */
   var child = spawn(config.players.mpchc, [url, '/play'])
   child.on('error', function (err) {
     console.log('Failed to start child process: ' + err)
+  })
+  child.on('exit', function () {
+    console.log('exit video player')
+    server.close()
+    client.destroy()
   })
 }
 

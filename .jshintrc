@@ -1,0 +1,11 @@
+{
+  "asi": true,
+  "laxcomma": false,
+  "bitwise": true,
+  "eqeqeq": true,
+  "es5": true,
+  "esnext": true,
+  "node": true,
+  "strict": false,
+  "globalstrict": true
+}

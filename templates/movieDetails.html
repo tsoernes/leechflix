@@ -29,15 +29,19 @@
 	{% for release in movie.release %}
 	 <tr>
 		<td>
-			<a class="asimple" onclick="openLink('{{release.torrentUrl}}')">
+			<a class="asimple" onclick="openLink(' {{release.torrentUrl}} ')">
 			<i class="fa fa-download"></i></a>
-			<a class="asimple" onclick="openLink('{{release.detailsUrl}}')">
-			{{release.rlsDetails}}</a>
+			<a class="asimple" onclick="openLink(' {{release.detailsUrl}} ')">
+			{{release.rlsDetails}}
+      {% if release.freeleech %}
+      <i class="fa fa-star" style='color:green'></i>
+      {% endif %}
+      </a>
 		</td>
 		<td>{{release.size}}</td>
-		<td><i class="fa fa-arrow-up" style="color:green"></i>{{release.seeders}}</td>
-		<td><i class="fa fa-arrow-down" style="color:red"></i>{{release.leechers}}</td>
-	    <td><a class="asimple" onclick="play('{{release.torrentUrl}}')"><i class="fa fa-play-circle"></i>Stream</a></td>
+		<td><i class="fa fa-arrow-up" style="color:green"></i> {{release.seeders}} </td>
+		<td><i class="fa fa-arrow-down" style="color:red"></i> {{release.leechers}} </td>
+	    <td><a class="asimple" onclick="play(' {{release.torrentUrl}} ')"><i class="fa fa-play-circle"></i>Stream</a></td>
 	</tr>
 	{% endfor %}
 	</table>
