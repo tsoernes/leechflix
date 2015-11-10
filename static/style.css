@@ -40,11 +40,10 @@ body {
 Movie details
 ----------------------*/
 
-/* Modal container */
 .topDiv {
 	display: inline-block;
-	height: 700px;
-	width: 1200px;
+	height: 90%;
+	width: 95%;
 	padding: 20px;
 	background-color: #EBEBEB;
 	color: rgba(27, 27, 27, 0.98);
@@ -90,7 +89,6 @@ Movie details
 .topDivDes {
 	width: 90%;
 	margin: 10px auto;
-	padding-top: 10px;
 	text-align: justify;
 	position: relative;
 }
@@ -257,10 +255,7 @@ a:hover {
 #content {
 	padding: 20px;
 	height: 100%;
-	left: 90px;
 	position: absolute;
-	width: -webkit-calc(100% - 140px);
-
 }
 
 
@@ -281,29 +276,6 @@ a:hover {
 	margin: 20px 20px;
 	display: inline-block;
 	overflow: hidden;
-}
-
-.item {
-	width: 160px;
-	height:295px;
-	margin: 20px 15px;
-
-	display: inline-block;
-	float: left;
-
-	position:relative;
-
-	overflow: hidden;
-
-}
-.placeholder {
-	height: 235px;
-	width: 170px;
-	display: block;
-	position: relative;
-
-	overflow: hidden;
-	cursor: pointer;
 }
 
 .notClickable {
@@ -351,11 +323,11 @@ a:hover {
 }
 
 .coverImage {
-	height: 225px;
-	width: 150px;
+  height: 297px;
+	width: 200px;
 	border-style: solid;
 	border-color: black;
-	border-width: 2px;
+	border-width: 1px;
 	display: inline-block;
 	background-image: url("blank.png");
 	background-position: center;
@@ -363,19 +335,24 @@ a:hover {
 	background-size: cover;
 }
 
-.detailsImagePlaceholder {
-	height: 445px;
-	width: 300px;
+.placeholder {
+	height: 320px;
+	width: 200px;
+	display: block;
+	position: relative;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.item {
+	height: 334px;
+	width: 224px;
+	margin: 15px 10px;
 	display: inline-block;
-	position: absolute;
+	float: left;
+	position:relative;
+	overflow: hidden;
 }
-
-.detailsCoverImage {
-	height: 445px;
-	width: 300px;
-	background-image: url("blank.png");
-}
-
 
 .item img {
 	border-style: solid;
@@ -391,6 +368,18 @@ a:hover {
 	text-align: center;
 }
 
+.detailsImagePlaceholder {
+	height: 445px;
+	width: 300px;
+	display: inline-block;
+	position: absolute;
+}
+
+.detailsCoverImage {
+	height: 445px;
+	width: 300px;
+	background-image: url("blank.png");
+}
 
 .banner {
 	width: 100%;
@@ -417,6 +406,22 @@ a:hover {
 	margin: 0px;
 }
 
+.topDivBanner h1{
+	margin: 20px 20px;
+	padding-top: 25px;
+	font-size: 45px;
+
+	line-height: 50px;
+	max-height: 100px;
+	overflow: hidden;
+}
+
+.topDivBanner h5 {
+	margin: 15px 30px;
+	font-size: 20px;
+	line-height: 25px;
+	overflow: hidden;
+}
 
 .confirmBunner {
 	display: ;
@@ -445,26 +450,6 @@ a:hover {
 	background-color: rgba(27, 27, 27,.8);
 }
 
-
-.topDivBanner h1{
-	margin: 10px 30px;
-	padding-top: 50px;
-	font-size: 45px;
-	line-height: 50px;
-	max-height: 100px;
-	overflow: hidden;
-}
-
-.topDivBanner h5 {
-	margin: 10px 30px;
-	font-size: 20px;
-	line-height: 25px;
-	height: 50px;
-	overflow: hidden;
-}
-
-
-
 .leftItem {
 	text-align: left;
 	left: 5px;
@@ -479,8 +464,7 @@ a:hover {
 .titleText {
 	font-weight: normal;
 	font-size: 14px!important;
-	margin: 1px 1px;
-	line-height: 1px;
+	margin: -15px 1px;
 	text-align: left!important;
 	left: 1px;
 	position: absolute!important;
@@ -497,9 +481,9 @@ a:hover {
 	color: gray;
 	margin: 1px 1px;
 	line-height: 1px;
+  height: 20px;
 	position: absolute;
 	display: inline-block;
-	bottom: 25px;
 }
 
 .leftInfoItem {
@@ -509,7 +493,7 @@ a:hover {
 
 .rightInfoItem {
 	text-align: right;
-	right: 1px;
+	right: 25px;
 }
 
 .centerInfoItem {

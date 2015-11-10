@@ -1,27 +1,30 @@
 {% if movie.isCollection == false %}
-{% if movie.imgUrl.length > 0 %}
-<div class="topDivBanner" style="background-image:url({{movie.imgUrl}})">
-{% else %}
-<div class="topDivBanner" style="background-image">
-{% endif %}
-	<div class="bunnerOverlay">
-		<h1>{{movie.title}}</h1>
-		<h5>{{movie.year}}</h5>
-		<p class="topDivText leftItem" id="movieLength">{{movie.runtime}} minutes</p>
-		<p class="topDivText leftItem" id="movieMore">{{movie.genres}}</p>
-		<p class="topDivText rightItem" id="movieYT">
-			<a onclick="openLink('http://www.youtube.com/results?search_query={{movie.title}}+Trailer')">Trailer<i class="fa fa-youtube"></i></a>
-		</p>
-		<p class="topDivText rightItem" id="movieIMDB">
-			<a onclick="openLink('http://www.imdb.com/title/{{movie.imdbId}}/')">
-				IMDb: {{movie.imdbRating}}/10 ({{movie.imdbVotes}} votes)
-			</a>
-		</p>
-		<div class="topDivDes">
-			{{movie.plot}}
-		</div>
-	</div>
-</div>
+  {% if movie.imgUrl.length > 0 %}
+    <div class="topDivBanner" style="background-image:url({{movie.imgUrl}})">
+  {% else %}
+    <div class="topDivBanner" style="background-image">
+  {% endif %}
+  	<div class="bunnerOverlay">
+  		<h1>{{movie.title}} ({{movie.year}})</h1>
+      {% if movie.runtime %}
+  		<p class="topDivText leftItem" id="movieLength">{{movie.runtime}} minutes</p>
+      {% endif %}
+      {% if movie.genres.length > 0 %}
+  		<p class="topDivText leftItem" id="movieMore">{{movie.genres}}</p>
+      {% endif %}
+  		<p class="topDivText rightItem" id="movieYT">
+  			<a onclick="openLink('http://www.youtube.com/results?search_query={{movie.title}}+Trailer')">Trailer<i class="fa fa-youtube"></i></a>
+  		</p>
+  		<p class="topDivText rightItem" id="movieIMDB">
+  			<a onclick="openLink('http://www.imdb.com/title/{{movie.imdbId}}/')">
+  				IMDb: {{movie.imdbRating}}/10 ({{movie.imdbVotes}} votes)
+  			</a>
+  		</p>
+  		<div class="topDivDes">
+  			{{movie.plot}}
+  		</div>
+  	</div>
+  </div>
 {% endif %}
 
 <div class "rlsTable" style="width: 90%">
