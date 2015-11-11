@@ -25,10 +25,11 @@ Only supports Windows x64 with MPC-HC
 
 - webtorrent memory leak
 
-*Feautures*
+*Features*
 
 - support for tv shows
 - search
 - retrieve all releases by search when viewing movie details
 - revamp gui
 - implement seeding of previously streamed torrents or launch seeding in external client on finished download
+- mark watched movies
