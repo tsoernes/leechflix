@@ -19,13 +19,13 @@ Build with NodeJS for Node-webkit
 
 Only supports Windows x64 with MPC-HC
 
-@Todo
+**@Todo**
 
-Bugfixing:
+*Bugfixing*
 
 - webtorrent memory leak
 
-Feautures:
+*Feautures*
 
 - support for tv shows
 - search
