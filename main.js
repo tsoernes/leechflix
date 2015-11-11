@@ -22,6 +22,7 @@ var config = require('./config.js')
 var appTemplate = swig.compileFile('./templates/app.html')
 var movieLibraryTemplate = swig.compileFile('./templates/movieLibrary.html')
 var movieDetails = swig.compileFile('./templates/movieDetails.html')
+var downloadProgress = swig.compileFile('./templates/downloadProgress.html')
 
 var currentScraper, currentMovies, currentUrl
 
@@ -63,9 +64,13 @@ function fetch () {
 }
 
 function play (torrentUrl) {
+  console.log(torrentUrl)
   scrapermain.downloadTorrent(torrentUrl, function (err, path) {
     if (err) console.log(err)
-    else streamer.play(path)
+    else {
+      streamer.play(path)
+      //showDownloadingOverlay(movie, release)
+    }
   })
 }
 
@@ -87,6 +92,21 @@ function showMovieOverlay (position) {
   var movie = currentMovies[position]
   document.getElementById('overlayMovie').innerHTML = (movieDetails({movie: movie}))
   $('#overlayMovie').trigger('openModal')
+}
+
+function showDownloadingOverlay (movie, release) {
+  document.getElementById('overlayDownloadProgress').innerHTML = (downloadProgress({movie: movie, release: release}))
+  $('#overlayDownloadProgress').trigger('openModal')
+  $(function() {
+  	$('#overlayDownloadProgress').easyModal({
+  		autoOpen: true,
+  		overlayOpacity: 0.8,
+  		overlayColor: "#3333FF",
+  		overlayClose: false,
+  		closeOnEscape: true,
+      closeButtonClass: '.close'
+  	});
+  });
 }
 
 function openLink (link) {

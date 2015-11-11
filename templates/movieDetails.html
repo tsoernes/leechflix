@@ -2,24 +2,24 @@
   {% if movie.imgUrl.length > 0 %}
     <div class="topDivBanner" style="background-image:url({{movie.imgUrl}})">
   {% else %}
-    <div class="topDivBanner" style="background-image">
+    <div class="topDivBanner">
   {% endif %}
-  	<div class="bunnerOverlay">
+  	 <div class="bunnerOverlay">
   		<h1>{{movie.title}} ({{movie.year}})</h1>
-      {% if movie.runtime %}
-  		<p class="topDivText leftItem" id="movieLength">{{movie.runtime}} minutes</p>
-      {% endif %}
-      {% if movie.genres.length > 0 %}
-  		<p class="topDivText leftItem" id="movieMore">{{movie.genres}}</p>
-      {% endif %}
+  		<p class="topDivText leftItem" id="movieLength">
+        {% if movie.genres.length > 0 %} {{movie.genres}} {% endif %}
+        {% if movie.runtime %} &emsp; &#9679; &emsp; {{movie.runtime}} minutes {% endif %}
+      </p>
   		<p class="topDivText rightItem" id="movieYT">
   			<a onclick="openLink('http://www.youtube.com/results?search_query={{movie.title}}+Trailer')">Trailer<i class="fa fa-youtube"></i></a>
   		</p>
+      {% if movie.imdbRating > 0 %}
   		<p class="topDivText rightItem" id="movieIMDB">
   			<a onclick="openLink('http://www.imdb.com/title/{{movie.imdbId}}/')">
   				IMDb: {{movie.imdbRating}}/10 ({{movie.imdbVotes}} votes)
   			</a>
   		</p>
+      {% endif %}
   		<div class="topDivDes">
   			{{movie.plot}}
   		</div>
@@ -33,18 +33,19 @@
 	 <tr>
 		<td>
 			<a class="asimple" onclick="openLink(' {{release.torrentUrl}} ')">
-			<i class="fa fa-download"></i></a>
-			<a class="asimple" onclick="openLink(' {{release.detailsUrl}} ')">
+			<i class="fa fa-download" title="Download torrent"></i></a>
+			<a class="asimple" onclick="openLink(' {{release.detailsUrl}} ')" title="Open torrent description in browser">
 			{{release.rlsDetails}}
       {% if release.freeleech %}
-      <i class="fa fa-star" style='color:green'></i>
+      <i class="fa fa-star" style='color:green' title="Freeleech"></i>
       {% endif %}
       </a>
 		</td>
 		<td>{{release.size}}</td>
-		<td><i class="fa fa-arrow-up" style="color:green"></i> {{release.seeders}} </td>
-		<td><i class="fa fa-arrow-down" style="color:red"></i> {{release.leechers}} </td>
-	    <td><a class="asimple" onclick="play(' {{release.torrentUrl}} ')"><i class="fa fa-play-circle"></i>Stream</a></td>
+		<td title="Seeders"><i class="fa fa-arrow-up" style="color:green" ></i> {{release.seeders}} </td>
+		<td title="Leechers"><i class="fa fa-arrow-down" style="color:red"></i> {{release.leechers}} </td>
+	  <td><a class="asimple" onclick="play('{{release.torrentUrl}}')"><i class="fa fa-play-circle"></i>Stream</a></td>
+    <td><a class="asimple" onclick="showDownloadingOverlay(' {{movie}}, {{release}} ')">test</a></td>
 	</tr>
 	{% endfor %}
 	</table>

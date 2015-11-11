@@ -36,6 +36,17 @@ body {
   src: local('Fira Sans'), url('fonts/FiraSans-Light.otf') format('opentype');
 }
 
+/*--------------------
+Download progress bar overlay
+--------------------*/
+.bottomBar {
+  display: inline-block;
+  height: 100px;
+  margin-top: 500px;
+	width: 100%;
+  overflow: hidden;
+  padding-top: 500px;
+}
 /*---------------------
 Movie details
 ----------------------*/
@@ -61,6 +72,7 @@ Movie details
 	background-position: top left;
 	height: 445px;
 	margin-top: -10px;
+  background-image: url("blank.png");
 	background-color: white;
 	background-repeat: no-repeat;
 }
@@ -78,7 +90,7 @@ Movie details
 .topDivText {
 	font-weight: normal;
 	margin: 10px 30px;
-	font-size: 17px;
+	font-size: 15px;
 	line-height: 25px;
 	height: 25px;
 	width: inherit;
@@ -109,6 +121,70 @@ Movie details
 	float:right;
 	text-align: right;
 }
+
+/*-----------------------
+Movie library
+-------------------------*/
+
+.item {
+  height: 355px;
+	width: 200px;
+	margin: 0px 15px;
+	display: inline-block;
+	float: left;
+	position: relative;
+	overflow: hidden;
+}
+
+.coverImage {
+  height: 297px;
+	width: 200px;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+	display: inline-block;
+  background: black;
+  border-radius: 4px;
+	background-image: url("blank.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+  cursor: pointer;
+}
+
+.titleText {
+	font-weight: normal;
+	font-size: 16px!important;
+	margin: -4px 1px;
+	text-align: left!important;
+	left: 1px;
+	position: absolute;
+	display: block!important;
+	width: inherit;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.infoText {
+	font-weight: normal;
+	font-size: 14px;
+	color: gray;
+	margin: 15px 1px;
+	position: absolute;
+	display: inline-block;
+}
+
+.leftInfoItem {
+	text-align: left;
+	left: 2px;
+}
+
+.rightInfoItem {
+	text-align: right;
+	right: 2px;
+}
+
 
 /*-----------------------
 
@@ -322,38 +398,6 @@ a:hover {
 		padding-right: 5px;
 }
 
-.coverImage {
-  height: 297px;
-	width: 200px;
-	border-style: solid;
-	border-color: black;
-	border-width: 1px;
-	display: inline-block;
-	background-image: url("blank.png");
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-}
-
-.placeholder {
-	height: 320px;
-	width: 200px;
-	display: block;
-	position: relative;
-	overflow: hidden;
-	cursor: pointer;
-}
-
-.item {
-	height: 334px;
-	width: 224px;
-	margin: 15px 10px;
-	display: inline-block;
-	float: left;
-	position:relative;
-	overflow: hidden;
-}
-
 .item img {
 	border-style: solid;
 	border-color: white;
@@ -459,45 +503,6 @@ a:hover {
 	text-align: right;
 	right: 5px;
 	text-decoration: underline;
-}
-
-.titleText {
-	font-weight: normal;
-	font-size: 14px!important;
-	margin: -15px 1px;
-	text-align: left!important;
-	left: 1px;
-	position: absolute!important;
-	display: block!important;
-	width: inherit;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.infoText {
-	font-weight: normal;
-	font-size: 13px;
-	color: gray;
-	margin: 1px 1px;
-	line-height: 1px;
-  height: 20px;
-	position: absolute;
-	display: inline-block;
-}
-
-.leftInfoItem {
-	text-align: left;
-	left: 1px;
-}
-
-.rightInfoItem {
-	text-align: right;
-	right: 25px;
-}
-
-.centerInfoItem {
-	text-align: center;
 }
 
 #movieMore {

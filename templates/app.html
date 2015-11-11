@@ -1,9 +1,9 @@
 <nav>
     <ul>
-        <li><a onclick="goTlNewPage()">TorretLeech</a>
+        <li><a onclick="goTlNewPage()">TorrentLeech</a>
         <ul>
           <li><a onclick="goTlNewPage()">New</a></li>
-          <li><a onclick="goTlPopPage('24HOURS')">Popular</a>
+          <li><a onclick="goTlPopPage('1MONTH')">Popular</a>
           <ul>
               <li><a onclick="goTlPopPage('24HOURS')">Last day</a></li>
   			      <li><a onclick="goTlPopPage('14DAYS')">Last week</a></li>
@@ -45,4 +45,8 @@
 	<div class="topDiv topDivFree" id="overlayMovie">
 	<!-- content from template movieDetails.html -->
 	</div>
+
+  <div class="bottomBar" id="overlayDownloadProgress">
+	<!-- content from template downloadProgress.html -->
+  </div>
 </div>

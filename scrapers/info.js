@@ -6,11 +6,6 @@ var omdb = require('omdb')
 function getOmdbInfo (show, i, callback) {
   show.type = 'movie'
   // Clean up search term
-  show.terms = show.terms.replace(/720p/ig, '')
-  show.terms = show.terms.replace(/1080p/ig, '')
-  show.terms = show.terms.replace(/bdrip/ig, '')
-  show.terms = show.terms.replace(/imax/ig, '')
-  show.terms = show.terms.replace(/unrated/ig, '').trim()
   omdb.search(show, function (err, movies) {
     if (err) {
       callback(err, null)

@@ -13,8 +13,14 @@ exports.extractInfoFromName = function (name) {
   if (typeof parsed.year === 'undefined') {
     parsed.year = ''
   }
+  // parsed.title sometimes miss to remove some terms ..
+  var title = parsed.title.replace(/720p/ig, '')
+  title = title.replace(/1080p/ig, '')
+  title = title.replace(/bdrip/ig, '')
+  title = title.replace(/imax/ig, '')
+  title = title.replace(/unrated/ig, '').trim()
   return ({
-    title: parsed.title,
+    title: title,
     year: parsed.year.toString(),
     rlsDetails: rlsDetails.trim()
   })
@@ -22,8 +28,9 @@ exports.extractInfoFromName = function (name) {
 
 exports.sort = function (movies) {
   return sortNoPostersLast(
-  sortMoviesByImdbRating(
-  sortReleasesBySeeders(movies)))
+    sortFewVotesLast(
+    sortMoviesByImdbRating(
+    sortReleasesBySeeders(movies))))
 }
 
 /*
@@ -68,4 +75,17 @@ function sortNoPostersLast (movies) {
     }
   }
   return withPoster.concat(noPoster)
+}
+
+function sortFewVotesLast (movies) {
+  var manyVotes = []
+  var fewVotes = []
+  for (var i = 0; i < movies.length; i++) {
+    if (movies[i].imdbVotes < 200 && !movies[i].isCollection) {
+      fewVotes.push(movies[i])
+    } else {
+      manyVotes.push(movies[i])
+    }
+  }
+  return manyVotes.concat(fewVotes)
 }

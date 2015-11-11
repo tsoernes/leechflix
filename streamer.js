@@ -50,8 +50,8 @@ function launchVideoPlayer (url) {
   })
   child.on('exit', function () {
     console.log('exit video player')
-    server.close()
-    client.destroy()
+    //server.close()
+    //client.destroy()
   })
 }
 
