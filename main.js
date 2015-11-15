@@ -64,7 +64,6 @@ function fetch () {
 }
 
 function play (torrentUrl) {
-  console.log(torrentUrl)
   scrapermain.downloadTorrent(torrentUrl, function (err, path) {
     if (err) console.log(err)
     else {
@@ -161,6 +160,11 @@ function goIptNewPage () {
   fetch()
 }
 
+function goIptSeeders() {
+  currentUrl = config.urls.ipt.moviesNew + config.urls.ipt.sortSeeders
+  setIptScraper()
+  fetch()
+}
 function setTlScraper () {
   currentScraper = tlscraper
 }

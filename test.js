@@ -1,10 +1,10 @@
-var movie = require('node-movie');
+var omdb = require('omdb');
 
 function get(term) {
-  movie(term, function (err, data) {
+  omdb.get(term, function (err, data) {
     console.log(err)
     console.log(data)
 });
 }
-
-get('furious 7')
+// 328 x 500
+get({title: 'The Mission', year: '1986'})

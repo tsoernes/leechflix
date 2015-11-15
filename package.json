@@ -12,12 +12,18 @@
   "dependencies": {
     "async": "*",
     "cheerio": "*",
+    "torrent-stream": "*",
     "nodelint": "^0.6.2",
-    "omdb": "*",
     "peerflix": "*",
+    "omdb": "*",
     "webtorrent": "*",
     "q": "*",
     "request": "*",
     "swig": "*"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsoernes/leechflix.git"
   }
 }

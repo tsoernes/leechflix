@@ -49,8 +49,10 @@ function getOmdbInfo (show, i, callback) {
           return
         } else {
           // Add whitespace after genres for prettier printing
-          movie.genres = movie.genres.map(function (s) { return ' ' + s })
-          movie.genres[0] = movie.genres[0].substring(1)
+          if (movie.genres) {
+            movie.genres = movie.genres.map(function (s) { return ' ' + s })
+            movie.genres[0] = movie.genres[0].substring(1)
+          }
           // Sometime imdb info is found but it has no rating; set it to 0 to avoid sorting issues
           if (movie.imdb.rating === null) movie.imdb.rating = 0
           callback(null, movie)
