@@ -3,7 +3,7 @@ Popcorn-Time like movie streamer for torrentleech & iptorrents
 
 **Usage**
 
-Enter your login credentials in `/src/config.js`
+Enter your login credentials in `config.js`
 
 ![alt text](http://s2.postimg.org/x94xwsn21/main.png "main")
 
