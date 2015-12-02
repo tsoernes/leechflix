@@ -8,21 +8,27 @@ Example: "The Man From U.N.C.L.E 2015 1080p BDRip-Haxx0r" -->
 */
 exports.extractInfoFromName = function (name) {
   var parsed = ptn(name)
-  var rlsDetails = name.replace(parsed.title, '')
-  rlsDetails = rlsDetails.replace(parsed.year, '')
+  //var rlsDetails = name.replace(parsed.title, '')
+  //rlsDetails = rlsDetails.replace(parsed.year, '')
   if (typeof parsed.year === 'undefined') {
     parsed.year = ''
   }
-  // parsed.title sometimes miss to remove some terms ..
+  // parsed.title sometimes fails to remove some terms ..
   var title = parsed.title.replace(/720p/ig, '')
   title = title.replace(/1080p/ig, '')
   title = title.replace(/bdrip/ig, '')
   title = title.replace(/imax/ig, '')
-  title = title.replace(/unrated/ig, '').trim()
+  title = title.replace(/unrated/ig, '')
+  title = title.replace(/extended/ig, '')
+  title = title.replace(/edition/ig, '')
+  if (title == '') {
+    console.log('Title went missing from : ' + name)
+    title = name.replace(parsed.year, '')
+  }
   return ({
-    title: title,
-    year: parsed.year.toString(),
-    rlsDetails: rlsDetails.trim()
+    title: title.trim(),
+    year: parsed.year.toString()
+    //rlsDetails: rlsDetails.trim()
   })
 }
 

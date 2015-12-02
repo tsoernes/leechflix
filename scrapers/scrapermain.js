@@ -36,6 +36,7 @@ exports.fetch = function (url, scraper, callback) {
     function (done) {
       scraper.scrapeTorrents(url, function (err, res) {
         scraperes = res
+        console.log('scraped ' + scraperes.length + ' movies from ' + url)
         done(err)
       })
     },
@@ -52,7 +53,32 @@ exports.fetch = function (url, scraper, callback) {
   ],
   function (err) {
     if (err) console.log(err)
-    console.log('scraped ' + sortres.length + ' movies from ' + url)
+    callback(err, sortres)
+  })
+}
+
+/*
+Scrape torrents from a search result, assumes all results are the same movie.
+Does not retrieve meta info. Sorts the result bases on number of seeders.
+*/
+exports.fetchReleases = function (url, scraper, callback) {
+  var scraperes, sortres
+
+  async.waterfall([
+    function (done) {
+      scraper.scrapeTorrents(url, function (err, res) {
+        scraperes = res
+        console.log('scraped ' + scraperes.length + ' movies from ' + url)
+        done(err)
+      })
+    },
+    function (done) {
+      sortres = scraperhelper.sort(scraperes)
+      done()
+    }
+  ],
+  function (err) {
+    if (err) console.log(err)
     callback(err, sortres)
   })
 }

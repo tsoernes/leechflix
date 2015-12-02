@@ -3,6 +3,15 @@ var async = require('async')
 var scraperhelper = require('./scraperhelper.js')
 var omdb = require('omdb')
 
+var blankMovie = {
+  title: 'Not found in IMDb',
+  poster: './static/folder2.jpg',
+  imdb: {
+    rating: 11,
+    votes: 0
+  }
+}
+
 function getOmdbInfo (show, i, callback) {
   show.type = 'movie'
   // Clean up search term
@@ -12,7 +21,7 @@ function getOmdbInfo (show, i, callback) {
     }
     if (movies.length === 0) {
       if (i === 0) {
-        // Remove special charactes (like - and .) and retry OMDb search
+        // Remove special characters (like - and .) and retry OMDb search
         show.terms = show.terms.replace(/[^a-z0-9\s]/gi, '')
         show.terms = show.terms.replace(/\s+/g, ' ') // Remove multiple whitespace with single space
         getOmdbInfo(show, i + 1, function (err, res) {
@@ -20,40 +29,36 @@ function getOmdbInfo (show, i, callback) {
         })
         return
       } if (i === 1) {
-        // Remove numers and retry OMDb search
+        // Remove numbers and retry OMDb search
         show.terms = show.terms.replace(/[0-9]/g, '')
+        show.terms = show.terms.replace(/\s+/g, ' ') // Remove multiple whitespace with single space
         getOmdbInfo(show, i + 1, function (err, res) {
           callback(err, res)
         })
         return
       } else {
         console.log('No results OMDb: ' + show.terms + ' ' + show.year)
-        var notFound = {
-          title: 'Not found in IMDb',
-          year: '',
-          runtime: '',
-          actors: '',
-          plot: '',
-          poster: './static/folder2.jpg',
-          imdb: {id: '',
-            rating: 11,
-            votes: 0}
-        }
-        callback(null, notFound)
+        callback(null, blankMovie)
         return
       }
     } else {
+      // @TODO Is there a more intelligent way to select which movie to get? Maybe try the one with the most votes?
+      // get(_, true) for extended plot
       omdb.get(movies[0].imdb, true, function (err, movie) {
         if (err) {
           callback(err, null)
           return
         } else {
+          if (!movie) {
+            console.log('Movie(s) found by search but not by get')
+            callback(null, blankMovie)
+          }
           // Add whitespace after genres for prettier printing
           if (movie.genres) {
             movie.genres = movie.genres.map(function (s) { return ' ' + s })
             movie.genres[0] = movie.genres[0].substring(1)
           }
-          // Sometime imdb info is found but it has no rating; set it to 0 to avoid sorting issues
+          // Sometimes IMDb info is found but it has no rating; set it to 0 to avoid sorting issues
           if (movie.imdb.rating === null) movie.imdb.rating = 0
           callback(null, movie)
         }
@@ -71,24 +76,19 @@ exports.getInfo = function (movies, callback) {
     var searchTerm = {terms: info.title, year: info.year}
     asyncTasks.push(function (done) {
       getOmdbInfo(searchTerm, 0, function (err, omdbInfo) {
-        var isCollection // Movies not found in OMDb gets collected into one item
         if (err) {
-          console.log(err)
+          console.log(searchTerm, err)
           done(err)
         }
-        if (omdbInfo.title === 'Not found in IMDb') {
-          isCollection = true
-          info.rlsDetails = movie.name
-        } else {
-          isCollection = false
-        }
+
+        var isCollection = (omdbInfo === blankMovie)
 
         var movieInfo = {
           isCollection: isCollection,
           title: omdbInfo.title,
           year: omdbInfo.year,
           release: [{
-            rlsDetails: info.rlsDetails,
+            rlsDetails: movie.name,
             detailsUrl: movie.detailsUrl,
             torrentUrl: movie.torrentUrl,
             size: movie.size,

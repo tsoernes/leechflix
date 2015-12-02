@@ -26,7 +26,7 @@ exports.scrapeTorrents = function (url, callback) {
       var torrentUrl = 'https://www.iptorrents.com' + $('td.ac', this).eq(1).children().eq(0).attr('href')
       // var info = $('div.ar.t_ctime', this).text() // imdb rating, year, genres .. could be useful
       var size = $('td.ac', this).eq(3).text()
-      if (parseInt(size) > config.maxTorrentSize) return
+      if (parseInt(size, 10) > config.maxTorrentSize) return
       var seeders = $('td.ac.t_seeders', this).text()
       var leechers = $('td.ac.t_leechers', this).text()
       var fleech = $('span.t_tag_free_leech', this).text()

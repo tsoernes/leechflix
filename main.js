@@ -24,7 +24,7 @@ var movieLibraryTemplate = swig.compileFile('./templates/movieLibrary.html')
 var movieDetails = swig.compileFile('./templates/movieDetails.html')
 var downloadProgress = swig.compileFile('./templates/downloadProgress.html')
 
-var currentScraper, currentMovies, currentUrl
+var currentScraper, currentMovies, currentUrl, currentMainUrl
 
 function start () {
   initCore(function () {
@@ -73,6 +73,16 @@ function play (torrentUrl) {
   })
 }
 
+function playBak (torrentUrl) {
+  scrapermain.downloadTorrent(torrentUrl, function (err, path) {
+    if (err) console.log(err)
+    else {
+      streamer.playBak(path)
+      //showDownloadingOverlay(movie, release)
+    }
+  })
+}
+
 function sendItemsToView () {
   document.body.innerHTML = (appTemplate())
   if (currentMovies !== null) {
@@ -87,10 +97,46 @@ function initUI () {
   $('#overlayMovie').easyModal()
 }
 
+function getReleases(movie, callback) {
+  if (movie.isCollection) {
+    callback(null, movie)
+    return
+  }
+  var url = getSearchUrl(currentMainUrl, movie.title + ' ' + movie.year)
+  console.log(url)
+  scrapermain.fetch(url, currentScraper, function (err, res) {
+    if (err) {
+      console.log('err' + err)
+      callback(err, null)
+      return
+    } else {
+      var movieWithReleases = res
+      if (movieWithReleases.length == 0) {
+        var err = 'Could not find any releases for ' + movie.title + ' ' + movie.year
+        callback(err, null)
+      } else if (movieWithReleases.length > 1) {
+        console.log('More than 1 movie when searching for releases:')
+        console.log(movieWithReleases)
+        function sortByNumReleases (a, b) {
+          return parseFloat(b.release.length) - parseFloat(a.release.length)
+        }
+        movieWithReleases = movieWithReleases.sort(sortByNumReleases)
+      }
+      callback(null, movieWithReleases[0])
+    }
+  })
+}
+
 function showMovieOverlay (position) {
   var movie = currentMovies[position]
-  document.getElementById('overlayMovie').innerHTML = (movieDetails({movie: movie}))
-  $('#overlayMovie').trigger('openModal')
+  getReleases(movie, function(err, res) {
+    if (err) {
+      console.log(err)
+      res = movie
+    }
+    document.getElementById('overlayMovie').innerHTML = (movieDetails({movie: res}))
+    $('#overlayMovie').trigger('openModal')
+  })
 }
 
 function showDownloadingOverlay (movie, release) {
@@ -150,8 +196,8 @@ function goTlNewPage () {
   fetch()
 }
 
-function getTlSearchUrl (term) {
-  return config.urls.tl.searchBeg + term.replace(' ', '+') + config.urls.tl.searchEnd
+function getSearchUrl (site, term) {
+  return site.searchBeg + term.replace(/[^a-zA-Z0-9]/g,'+') + site.searchEnd
 }
 
 function goIptNewPage () {
@@ -167,8 +213,10 @@ function goIptSeeders() {
 }
 function setTlScraper () {
   currentScraper = tlscraper
+  currentMainUrl = config.urls.tl
 }
 
 function setIptScraper () {
   currentScraper = iptscraper
+  currentMainUrl = config.urls.ipt
 }

@@ -10,10 +10,10 @@
     <span class="coverImage" onclick="showMovieOverlay('{{movies.indexOf(movie)}}')" ></span>
     {% endif %}
     <p class="titleText">
-    {% if movie.hasfreeleech %} <i class="fa fa-star" style='color:green' title="Freeleech"></i> {% endif %} 
+    {% if movie.hasfreeleech %} <i class="fa fa-star" style='color:green' title="Freeleech"></i> {% endif %}
     {{movie.title}} </p>
     <p class="infoText leftInfoItem"> {{movie.year}} </p>
-    {% if movie.imdbRating === 11 %}
+    {% if movie.isCollection %}
     <p class="infoText leftInfoItem"> {{movie.release.length}} movies </p>
     {% else %}
     <p class="infoText rightInfoItem"> {{movie.imdbRating}} </p>

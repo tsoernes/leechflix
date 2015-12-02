@@ -7,6 +7,11 @@ var server, client
 exports.play = function (torrentFilePath) {
   launchWebtorrent(torrentFilePath)
   //launchTorrentStream(torrentFilePath)
+  //launchPeerflix(torrentFilePath)
+}
+
+exports.playBak = function (torrentFilePath) {
+  launchPeerflix(torrentFilePath)
 }
 
 function launchWebtorrent (torrentFilePath) {
@@ -25,18 +30,16 @@ function launchWebtorrent (torrentFilePath) {
     launchVideoPlayer(url)
 		/*
     @TODO: need to close and destroy when finished wathcing movie
-
 		*/
-		/*
-    @TODO feature: show download progress
+
+
+    //@TODO feature: show download progress
 		torrent.on('download', function(chunkSize){
-		  console.log('chunk size: ' + chunkSize);
 		  console.log('total downloaded: ' + torrent.downloaded);
 		  console.log('download speed: ' + torrent.downloadSpeed());
 		  console.log('progress: ' + torrent.progress);
 		  console.log('======');
 		  })
-  		*/
   })
 }
 

@@ -1,10 +1,12 @@
-var omdb = require('omdb');
+var kat = require("kat-api-json");
+kat.mostPopular({
+  category: "tv",
+  page: 1
+},function(err,data){
+  if ( err ) {
+    throw err;
+  }
 
-function get(term) {
-  omdb.get(term, function (err, data) {
-    console.log(err)
-    console.log(data)
+  console.log(data);
+
 });
-}
-// 328 x 500
-get({title: 'The Mission', year: '1986'})
