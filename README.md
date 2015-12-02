@@ -3,12 +3,7 @@ Popcorn-Time like movie streamer for torrentleech & iptorrents
 
 **Usage**
 
-1) [Download](/bin/leechflix-0.1.zip) and unzip
-
-2) Enter your login credentials in `/src/config.js`
-
-3) Run leechflix.bat
-
+Enter your login credentials in `/src/config.js`
 
 ![alt text](http://s2.postimg.org/x94xwsn21/main.png "main")
 
@@ -17,19 +12,16 @@ Popcorn-Time like movie streamer for torrentleech & iptorrents
 
 Build with NodeJS for Node-webkit
 
-Only supports Windows x64 with MPC-HC
-
 **@Todo**
 
 *Bugfixing*
 
 - webtorrent memory leak
+- scrape imdb id when not found in omdb by search
 
 *Features*
 
 - support for tv shows
 - search
-- retrieve all releases by search when viewing movie details
 - revamp gui
 - implement seeding of previously streamed torrents or launch seeding in external client on finished download
-- mark watched movies
