@@ -44,8 +44,7 @@
 		<td>{{release.size}}</td>
 		<td title="Seeders"><i class="fa fa-arrow-up" style="color:green" ></i> {{release.seeders}} </td>
 		<td title="Leechers"><i class="fa fa-arrow-down" style="color:red"></i> {{release.leechers}} </td>
-	  <td><a class="asimple" onclick="play('{{release.torrentUrl}}')"><i class="fa fa-play-circle"></i>Stream WebTorrent</a></td>
-    <td><a class="asimple" onclick="playBak('{{release.torrentUrl}}')"><i class="fa fa-play-circle"></i>Stream Peerflix</a></td>
+	  <td><a class="asimple" onclick="play('{{release.torrentUrl}}')"><i class="fa fa-play-circle"></i>Stream</a></td>
     <td><a class="asimple" onclick="showDownloadingOverlay(' {{movie}}, {{release}} ')">test</a></td>
 	</tr>
 	{% endfor %}

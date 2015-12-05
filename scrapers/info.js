@@ -37,7 +37,7 @@ function getOmdbInfo (show, i, callback) {
         })
         return
       } else {
-        console.log('No results OMDb: ' + show.terms + ' ' + show.year)
+        //console.log('No results OMDb: ' + show.terms + ' ' + show.year)
         callback(null, blankMovie)
         return
       }
