@@ -11,8 +11,9 @@ Enter your login credentials for the torrent trackers in `config.js`
 
 **@Todo**
 
-- recommend best release based on quality (x265>x264, size) and availability (seeders>min, seeders/leechers)
+- recommend best release based on quality (x265>x264 etc, size) and availability (seeders>min, seeders/leechers)
 - trending movies view
+- add kickasstorrents
 - scrape imdb id when not found in omdb by search
 - search
 - revamp gui
