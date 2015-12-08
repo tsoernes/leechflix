@@ -1,5 +1,5 @@
 # leechflix
-Popcorn-Time like movie streamer for torrentleech & iptorrents
+Popcorn-Time like movie streamer for TorrentLeech & IPTorrents
 
 **Usage**
 
@@ -12,8 +12,8 @@ Enter your login credentials for the torrent trackers in `config.js`
 **@Todo**
 
 - recommend best release based on quality (x265>x264, size) and availability (seeders>min, seeders/leechers)
+- trending movies view
 - scrape imdb id when not found in omdb by search
-- support for tv shows
 - search
 - revamp gui
 - implement seeding of previously streamed torrents or launch seeding in external client on finished download
