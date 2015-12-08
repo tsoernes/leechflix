@@ -3,24 +3,16 @@ Popcorn-Time like movie streamer for torrentleech & iptorrents
 
 **Usage**
 
-Enter your login credentials in `config.js`
+Enter your login credentials for the torrent trackers in `config.js`
 
 ![alt text](http://s2.postimg.org/x94xwsn21/main.png "main")
 
 ![alt text](http://s2.postimg.org/6msh7tiux/details.png "det")
 
-
-Build with NodeJS for Node-webkit
-
 **@Todo**
 
-*Bugfixing*
-
-- webtorrent memory leak
+- recommend best release based on quality (x265>x264, size) and availability (seeders>min, seeders/leechers)
 - scrape imdb id when not found in omdb by search
-
-*Features*
-
 - support for tv shows
 - search
 - revamp gui
